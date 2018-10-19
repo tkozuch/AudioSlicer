@@ -131,8 +131,26 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
 
-CELERY_BROKER_URL = 'amqp://admin:admin@localhost:5672/admin_host'
-CELERY_RESULT_BACKEND = 'amqp://admin:admin@localhost:5672/admin_host'
+
+if os.environ['CLOUDAMQP_URL']:
+	CELERY_BROKER_URL = os.environ.['CLOUDAMQP_URL']
+else: 
+	CELERY_BROKER_URL = 'amqp://admin:admin@localhost:5672/admin_host'
+
+if os.environ['DATABASE_URL']:
+	CELERY_RESULT_BACKEND = os.environ['DATABASE_URL']
+else:
+	CELERY_RESULT_BACKEND = 'amqp://admin:admin@localhost:5672/admin_host'
+	
+broker_pool_limit = 1 # Will decrease connection usage
+broker_heartbeat = None # We're using TCP keep-alive instead
+broker_connection_timeout = 30 # May require a long timeout due to Linux DNS timeouts etc
+result_backend = None # AMQP is not recommended as result backend as it creates thousands of queues
+event_queue_expires = 60 # Will delete all celeryev. queues without consumers after 1 minute.
+worker_prefetch_multiplier = 1 # Disable prefetching, it's causes problems and doesn't help performance
+worker_concurrency = 50 # If you tasks are CPU bound, then limit to the number of cores, otherwise increase substainally
+
+	
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
