@@ -132,14 +132,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
-if os.environ['CLOUDAMQP_URL']:
+try: 
+	os.environ['CLOUDAMQP_URL']
 	CELERY_BROKER_URL = os.environ['CLOUDAMQP_URL']
-else: 
+except KeyError: 
 	CELERY_BROKER_URL = 'amqp://admin:admin@localhost:5672/admin_host'
 
-if os.environ['DATABASE_URL']:
+try:
+	os.environ['DATABASE_URL']:
 	CELERY_RESULT_BACKEND = os.environ['DATABASE_URL']
-else:
+except KeyError:
 	CELERY_RESULT_BACKEND = 'amqp://admin:admin@localhost:5672/admin_host'
 	
 broker_pool_limit = 1 # Will decrease connection usage
