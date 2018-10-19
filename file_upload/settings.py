@@ -139,7 +139,7 @@ except KeyError:
 	CELERY_BROKER_URL = 'amqp://admin:admin@localhost:5672/admin_host'
 
 try:
-	os.environ['DATABASE_URL']:
+	os.environ['DATABASE_URL']
 	CELERY_RESULT_BACKEND = os.environ['DATABASE_URL']
 except KeyError:
 	CELERY_RESULT_BACKEND = 'amqp://admin:admin@localhost:5672/admin_host'
