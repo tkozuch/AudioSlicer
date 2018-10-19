@@ -25,6 +25,8 @@ Now website is available on local address: http://127.0.0.1:8000/
 
 ### Prerequisites
 
+-rabbitMQ
+
 -python 3.6.3
 
 -django 2.1.2
