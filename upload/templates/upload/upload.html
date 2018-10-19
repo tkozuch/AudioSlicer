@@ -1,0 +1,21 @@
+{% extends 'upload/base.html' %}
+{% load static %}
+{% block body %}
+<div class="row">
+  <div class="col-xl-9 mx-auto">
+    <h1 class="mb-5">Paste songs timing info, upload file and slice!</h1>
+  </div>
+  <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+    <form id="generate-user-form" enctype="multipart/form-data" action="" method="post">
+      {% csrf_token %}
+
+      {{ form }}
+      <button type="submit" class="btn btn-block btn-lg btn-primary" style>Slice!</button>
+      <div class="form-row" align="center">
+        <div class="col-6 col-md-2">
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
