@@ -133,7 +133,7 @@ MEDIA_URL = '/media/'
 
 
 if os.environ['CLOUDAMQP_URL']:
-	CELERY_BROKER_URL = os.environ.['CLOUDAMQP_URL']
+	CELERY_BROKER_URL = os.environ['CLOUDAMQP_URL']
 else: 
 	CELERY_BROKER_URL = 'amqp://admin:admin@localhost:5672/admin_host'
 
