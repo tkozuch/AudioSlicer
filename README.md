@@ -11,16 +11,15 @@ Run command:
 git clone https://github.com/tkozuch/AudioSlicer.git
 ```
 Go to AudioSlicer project folder and open terminal and:
-
-'''
+```
 celery -A file_upload worker -l info
-'''
+```
 
 Open another terminal and:
 
-'''
+```
 python manage.py runserver
-'''
+```
 
 Now website is available on local address: http://127.0.0.1:8000/
 
@@ -34,9 +33,9 @@ pydub
 
 Open terminal in project folder and run:
 
-'''
+```
 pip install -r requirements.txt
-'''
+```
 
 ## Built With
 -Django framework
