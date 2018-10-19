@@ -1,3 +1,5 @@
-pydub
+python>=3.6.3
 django==2.1.2
+django-heroku
 celery==3.1.25
+pydub
