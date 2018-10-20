@@ -65,5 +65,6 @@ Tomasz Kożuch
 
 ## License
 
+The author takes no legal responsibility for any out of law use of this application.
 Redistributing this project without knowledge and permission from the author is forbidden. However I allow for personal non-commercial use.
 
