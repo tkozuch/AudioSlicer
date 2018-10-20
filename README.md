@@ -1,6 +1,15 @@
 # AudioSlicer
 
-Audio Slicer is a web application for slicing audio files according to information given in form of text. A typical usage example includes slicing live concert record or album to individual songs.
+Audio Slicer is a web application for slicing audio files according to information given in form of text. A typical usage example includes slicing live concert record or album to individual songs. User gives only two input informations: text informing about titles and cuts, and a file.
+
+An example text would be:
+'''
+1. You Love Me - ye ye ye 0:00
+2. My second song 3:40
+3. I Love You 7:20
+'''
+
+Where time indicates songs' starting times.
 
 ## Getting Started
 
