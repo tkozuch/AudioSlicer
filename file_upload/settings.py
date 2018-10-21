@@ -141,7 +141,13 @@ try:
 	CELERY_RESULT_BACKEND = os.environ['REDIS_URL']
 except KeyError:
 	CELERY_RESULT_BACKEND = 'amqp://admin:admin@localhost:5672/admin_host'
-	
+
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+django_heroku.settings(locals())
 # broker_pool_limit = 1 # Will decrease connection usage
 # broker_heartbeat = None # We're using TCP keep-alive instead
 # broker_connection_timeout = 30 # May require a long timeout due to Linux DNS timeouts etc
@@ -151,8 +157,3 @@ except KeyError:
 # worker_concurrency = 50 # If you tasks are CPU bound, then limit to the number of cores, otherwise increase substainally
 
 	
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-
-django_heroku.settings(locals())
