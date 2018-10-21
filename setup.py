@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='AudioSlicer',
     version='1.0',
-    packages=['upload', 'upload.migrations', 'file_upload'],
+    packages=['slicing_app', 'slicing_app.migrations', 'audio_slicer'],
     url='',
     license='',
     author='Tomasz Kożuch',

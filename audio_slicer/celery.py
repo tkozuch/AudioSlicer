@@ -4,11 +4,14 @@ from celery import Celery
 from . import settings
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'file_upload.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'audio_slicer.settings')
 
-redis =  'redis://h:pfff9e307e0f39a1653556a4c6618924242d71829fb5b5df21314de128ff6a9a6@ec2-34-197-18-235.compute-1.amazonaws.com:64039'
-app = Celery('file_upload', broker_pool_limit=1, broker=redis,
-             result_backend=redis)
+try:
+    redis =  os.environ['REDIS_URL']
+    app = Celery('audio_slicer', broker_pool_limit=1, broker=redis,
+                 result_backend=redis)
+except KeyError:
+    app = Celery('audio_slicer', broker_pool_limit=1)
 
 app.config_from_object('django.conf:settings')
 
