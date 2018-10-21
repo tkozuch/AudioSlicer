@@ -133,12 +133,12 @@ MEDIA_URL = '/media/'
 
 
 try: 
-	CELERY_BROKER_URL = os.environ['CLOUDAMQP_URL']
+	CELERY_BROKER_URL = os.environ['REDIS_URL']
 except KeyError: 
 	CELERY_BROKER_URL = 'amqp://admin:admin@localhost:5672/admin_host'
 
 try:
-	CELERY_RESULT_BACKEND = os.environ['CLOUDAMQP_URL']
+	CELERY_RESULT_BACKEND = os.environ['REDIS_URL']
 except KeyError:
 	CELERY_RESULT_BACKEND = 'amqp://admin:admin@localhost:5672/admin_host'
 	
