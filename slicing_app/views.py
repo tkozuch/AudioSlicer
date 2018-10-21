@@ -24,13 +24,13 @@ def upload_file(request):
             task = slice_audio.delay(local_file_path, text_info)
             csrf_token = csrf.get_token(request)
             context = {'task_id': task.id, 'my_csrf_token': csrf_token }
-            return render(request, 'upload/slicing.html', context)
+            return render(request, 'slicing_app/slicing.html', context)
         else:
             return HttpResponse(json.dumps({'task_id': None}),
                                 content_type='application/json')
     else:
         form = UploadFileForm
-    return render(request, 'upload/upload.html', {'form': form})
+    return render(request, 'slicing_app/upload.html', {'form': form})
 
 
 def get_progress(request):
