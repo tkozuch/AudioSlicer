@@ -6,16 +6,12 @@ from . import settings
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'file_upload.settings')
 
-app = Celery('file_upload', broker_pool_limit=1)
+redis =  'redis://h:pfff9e307e0f39a1653556a4c6618924242d71829fb5b5df21314de128ff6a9a6@ec2-34-197-18-235.compute-1.amazonaws.com:64039'
+app = Celery('file_upload', broker_pool_limit=1, broker=redis,
+             result_backend=redis)
 
-# Using a string here means the worker doesn't have to serialize
-# the configuration object to child processes.
-# namespace='CELERY' means all celery-related configuration keys
-# should have a `CELERY_` prefix.
 app.config_from_object('django.conf:settings')
 
-
-# Load task modules from all registered Django app configs.
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 @app.task(bind=True)
