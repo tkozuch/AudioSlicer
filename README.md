@@ -1,6 +1,6 @@
 # AudioSlicer
 
-Audio Slicer is a web application for slicing audio files according to information given in form of text. A typical usage example includes slicing live concert record or album to individual songs. User gives only two input informations: text informing about titles and cuts, and a file.
+Audio Slicer is a web application for slicing audio files according to information given in form of text. A typical usage example includes slicing live concert record or album to individual songs. User gives only two input informations: text informing about titles and cuts, and a file. Aplication is also available for viewing under address: https://rocky-cove-83707.herokuapp.com/ but due to problem with uploaded files hosting it is not working coreectly on herokuapp domain, nevertheless I am working on it. Locally everything works fine.
 
 An example text would be:
 ```
@@ -8,6 +8,8 @@ An example text would be:
 2. My second song 3:40
 3. I Love You 7:20
 ```
+
+And a typical audio input is a mp3 file.
 
 Where time indicates songs' starting times.
 
