@@ -25,6 +25,8 @@
   document.getElementById("id_file").onchange = function(){
     var files = document.getElementById("id_file").files;
     var file = files[0];
+    console.log(file);
+    console.log(typeof(file));
     if(!file){
       return alert("No file selected.");
     }
