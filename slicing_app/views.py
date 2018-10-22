@@ -1,5 +1,6 @@
 import os
 import json
+import boto3
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.middleware import csrf
@@ -50,3 +51,29 @@ def get_download_urls(request):
     urls = [fs.url(path) for path in paths]
     response_data = {'urls': urls}
     return HttpResponse(json.dumps(response_data), content_type='application/json')
+
+
+def sign_s3(request):
+    print("jestem w sign_s3")
+    S3_BUCKET = os.environ.get('S3_BUCKET')
+    
+    file_name = request.GET.get('file_name')
+    file_type = request.GET.get('file_type')
+    
+    s3 = boto3.client('s3')
+    
+    presigned_post = s3.generate_presigned_post(
+        Bucket = S3_BUCKET,
+        Key = file_name,
+        Fields = {"acl": "public-read", "Content-Type": file_type},
+        Conditions = [
+          {"acl": "public-read"},
+          {"Content-Type": file_type}
+        ],
+        ExpiresIn = 3600
+    )
+    
+    return json.dumps({
+    'data': presigned_post,
+    'url': 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, file_name)
+    })

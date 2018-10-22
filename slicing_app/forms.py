@@ -8,4 +8,4 @@ class UploadFileForm(forms.Form):
 5- These Girls 00:42"""
     title = forms.CharField(widget=forms.Textarea, label='',
                             initial=sample_text)
-    file = forms.FileField(label='')
+    file = forms.FileField(label='', )
