@@ -1,6 +1,7 @@
 import os
 import json
 import boto3
+from botocore.client import Config
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.middleware import csrf
@@ -18,13 +19,13 @@ def upload_file(request):
         if form.is_valid():
             text_info = request.POST.get('title')
             my_file = request.FILES['file']
-
+            
             file_name = FileSystemStorage().save(my_file.name, my_file)
             local_file_path = os.path.join(settings.MEDIA_ROOT, file_name)
-
+            
             task = slice_audio.delay(local_file_path, text_info)
             csrf_token = csrf.get_token(request)
-            context = {'task_id': task.id, 'my_csrf_token': csrf_token }
+            context = {'task_id': task.id, 'my_csrf_token': csrf_token}
             return render(request, 'slicing_app/slicing.html', context)
         else:
             return HttpResponse(json.dumps({'task_id': None}),
@@ -60,7 +61,7 @@ def sign_s3(request):
     file_name = request.GET.get('file_name')
     file_type = request.GET.get('file_type')
     
-    s3 = boto3.client('s3')
+    s3 = boto3.client('s3', config=Config(signature_version='s3v4'))
     
     presigned_post = s3.generate_presigned_post(
         Bucket = S3_BUCKET,
