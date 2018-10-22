@@ -4,3 +4,4 @@ django-heroku
 celery==3.1.25
 pydub
 gunicorn
+boto3
