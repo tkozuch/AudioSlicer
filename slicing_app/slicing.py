@@ -4,6 +4,9 @@ import os
 from django.template.defaultfilters import slugify
 from pydub import AudioSegment
 from celery import current_task, shared_task
+import pickle
+import boto3
+from botocore.client import Config
 
 
 @shared_task()
@@ -11,8 +14,8 @@ def slice_audio(album_path, info_file):
     """ Slices album into individual songs, and saves them into new
     folder. Returns exact paths of the created songs. """
     audio = AudioSegment.from_mp3(album_path)
-    localization = get_localization(album_path)
-    album_name = album_path.split("/").pop()
+    #localization = get_localization(album_path)
+    #album_name = album_path.split("/").pop()
     
     songs_info = extract_songs_info(info_file)
     songs_titles = list(songs_info.keys())
@@ -22,13 +25,14 @@ def slice_audio(album_path, info_file):
     songs_times.append(end_of_album)
     
     songs_paths = []
-    new_folder = create_song_folder(localization, album_name)
-    
+    #new_folder = create_song_folder(localization, album_name)
+    files = []
+    names = []
     for i in range(number_of_songs):
         song_title = songs_titles[i]
-        file_name = slugify(song_title)
+        file_name = slugify(song_title) + ".mp3"
         print("Extracting song titled: ", song_title)
-        total_song_path = "{}\\{}.mp3".format(new_folder, file_name)
+        #total_song_path = "{}\\{}.mp3".format(new_folder, file_name)
         song = get_song_audio(i, audio, songs_times)
         percent = int(float(i) / float(number_of_songs) * 100)
         current_task.update_state(state='PROGRESS',
@@ -37,9 +41,41 @@ def slice_audio(album_path, info_file):
                                       'total': number_of_songs,
                                       'percent': percent
                                   })
-        song.export(total_song_path, format="mp3", bitrate="202")
-        songs_paths.append(total_song_path)
-    return songs_paths
+        file = song.export(format="mp3", bitrate="202")
+        #songs_paths.append(total_song_path)
+        # Zwrocenie slownika tutaj z plikiem, czy zwrocenie obiektu pliku w
+        # ogole tu powoduje wysypanie i blad typu 'cannot serialize'/ is not
+        #  JSON serializable.
+        # files[file_name]=file
+        files.append(file)
+        names.append(file_name)
+    urls = upload_to_s3(names, files)
+    
+    return {'urls': urls, 'names': names}
+
+
+def upload_to_s3(keys, files):
+    """
+    :return: list of url addresses of uploaded files.
+    """
+    urls = []
+    ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    ACCESS_SECRET_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    BUCKET_NAME = os.environ.get('S3_BUCKET')
+    s3 = boto3.resource(
+        's3',
+        aws_access_key_id=ACCESS_KEY_ID,
+        aws_secret_access_key=ACCESS_SECRET_KEY,
+        config=Config(signature_version='s3v4')
+    )
+    for key, file in zip(keys, files):
+        print("Zaraz wysle: ", key)
+        s3.Bucket(BUCKET_NAME).put_object(Key=key, Body=file,
+                                          ACL='public-read')
+        urls.append("https://s3.eu-central-1.amazonaws.com/{}/{}" \
+                    .format(BUCKET_NAME, key))
+    
+    return urls
 
 
 def extract_songs_info(file):
