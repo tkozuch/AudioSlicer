@@ -143,10 +143,10 @@ except KeyError:
 	CELERY_RESULT_BACKEND = 'amqp://admin:admin@localhost:5672/admin_host'
 
 
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-
+CELERY_ACCEPT_CONTENT = ['pickle']
+CELERY_TASK_SERIALIZER = 'pickle'
+CELERY_RESULT_SERIALIZER = 'pickle'
+#LANG='zh_CN.UTF-16'
 django_heroku.settings(locals())
 # broker_pool_limit = 1 # Will decrease connection usage
 # broker_heartbeat = None # We're using TCP keep-alive instead

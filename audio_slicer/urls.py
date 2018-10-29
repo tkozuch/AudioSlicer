@@ -8,8 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.upload_file),
     path('get_progress/', views.get_progress),
-    path('get_download_urls/', views.get_download_urls),
-    path('sign_s3', views.sign_s3),
+    #path('test/', views.test),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

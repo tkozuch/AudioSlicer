@@ -1,16 +1,3 @@
-{% extends 'slicing_app/base.html' %}
-{% block body %}
-{% load static %}
-<div class="progress" style="text-align: center">
-  <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-  <div class="col-xl-9 mx-auto">
-      <h1 id="wait">Wait a moment...</h1>
-      <ul id="links-list" align="center"></ul>
-  </div>
-<br>
-
-<script type="text/javascript">
 (function(){
   var json_dump = "{{ data }}";
   var task_id = "{{task_id}}";
@@ -28,7 +15,7 @@
                 if (result.state == 'PENDING') {
                     progress_bar.html('Please wait...');
                 }
-                else if(result.state == 'PROGRESS'){
+                else if(result.state != 'SUCCESS'){
                         progress_bar.css({'width': result.details.percent + '%'});
                         progress_bar.html(result.details.current + '/' + result.details.total);
                 }
@@ -43,24 +30,8 @@
                 }
             },
       });
-  },500);
+  },1000);
 
-  function getDownloadUrls(paths){
-    var urls = null;
-    $.ajax({
-      async: false,
-      url:'get_download_urls/',
-      type: 'POST',
-      data: {
-          paths: paths,
-          csrfmiddlewaretoken: "{{ my_csrf_token }}",
-      },
-      success: function(result) {
-        urls = result.urls;
-      },
-    });
-    return urls;
-  }
 
   function createHtmlForDownloadLinks(urls, names){
     var links_list = $("#links-list");
@@ -71,16 +42,4 @@
       html += "<br><a href=\"" + url + "\" download>" + name + "</a>";
     }
     links_list.html(html);
-  }
-
-  function getFilesNames(paths){
-    var names = [];
-    for (i = 0; i < paths.length; i++){
-      path = paths[i];
-      names[i] = path.split('\\').pop().split('/').pop();;
-    }
-    return names;
-  }
-}());
-</script>
-{% endblock %}
+  };
