@@ -4,16 +4,17 @@ import os
 from django.template.defaultfilters import slugify
 from pydub import AudioSegment
 from celery import current_task, shared_task
-import pickle
+from io import BytesIO
 import boto3
 from botocore.client import Config
 
 
 @shared_task()
-def slice_audio(album_path, info_file):
+def slice_audio(s3_file_key, info_file):
     """ Slices album into individual songs, and saves them into new
     folder. Returns exact paths of the created songs. """
-    audio = AudioSegment.from_mp3(album_path)
+    file = download_s3_file(s3_file_key)
+    audio = AudioSegment.from_mp3(file)
     #localization = get_localization(album_path)
     #album_name = album_path.split("/").pop()
     
@@ -54,6 +55,13 @@ def slice_audio(album_path, info_file):
     return {'urls': urls, 'names': names}
 
 
+def download_s3_file(key):
+    s3_client = boto3.client('s3')
+    s3_response_object = s3_client.get_object(Bucket='tikej', Key=key)
+    object_content = s3_response_object['Body'].read()
+    
+    return BytesIO(object_content)
+
 def upload_to_s3(keys, files):
     """
     :return: list of url addresses of uploaded files.
@@ -69,7 +77,6 @@ def upload_to_s3(keys, files):
         config=Config(signature_version='s3v4')
     )
     for key, file in zip(keys, files):
-        print("Zaraz wysle: ", key)
         s3.Bucket(BUCKET_NAME).put_object(Key=key, Body=file,
                                           ACL='public-read')
         urls.append("https://s3.eu-central-1.amazonaws.com/{}/{}" \
