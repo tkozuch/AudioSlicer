@@ -6,7 +6,7 @@ from django.core.files.storage import FileSystemStorage
 from celery.result import AsyncResult
 
 from .forms import UploadFileForm
-from .slicing import slice_audio
+from .slicing import slice_audio, upload_to_s3
 
 
 def upload_file(request):
@@ -14,14 +14,15 @@ def upload_file(request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             text_info = request.POST.get('title')
-            my_file = request.FILES['file'].file
-
-            #file_name = FileSystemStorage().save(my_file.name, my_file)
-            #local_file_path = os.path.join(settings.MEDIA_ROOT, file_name)
-
-            task = slice_audio.delay(my_file, text_info)
+            my_file = request.FILES['file']
             csrf_token = csrf.get_token(request)
+            
+            key = my_file.name
+            upload_to_s3(key, my_file.file)
+            task = slice_audio.delay(key, text_info)
+            
             context = {'task_id': task.id, 'my_csrf_token': csrf_token }
+            
             return render(request, 'slicing_app/slicing.html', context)
         else:
             return HttpResponse(json.dumps({'task_id': None}),
