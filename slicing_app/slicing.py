@@ -29,6 +29,7 @@ def slice_audio(s3_file_key, info_file):
     #new_folder = create_song_folder(localization, album_name)
     files = []
     names = []
+    urls = []
     for i in range(number_of_songs):
         song_title = songs_titles[i]
         file_name = slugify(song_title) + ".mp3"
@@ -50,7 +51,7 @@ def slice_audio(s3_file_key, info_file):
         # files[file_name]=file
         files.append(file)
         names.append(file_name)
-    urls = upload_to_s3(names, files)
+        urls.append(upload_to_s3(file_name, file))
     
     return {'urls': urls, 'names': names}
 
@@ -62,11 +63,12 @@ def download_s3_file(key):
     
     return BytesIO(object_content)
 
-def upload_to_s3(keys, files):
+
+def upload_to_s3(key, file):
     """
     :return: list of url addresses of uploaded files.
     """
-    urls = []
+    
     ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
     ACCESS_SECRET_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
     BUCKET_NAME = os.environ.get('S3_BUCKET')
@@ -76,13 +78,12 @@ def upload_to_s3(keys, files):
         aws_secret_access_key=ACCESS_SECRET_KEY,
         config=Config(signature_version='s3v4')
     )
-    for key, file in zip(keys, files):
-        s3.Bucket(BUCKET_NAME).put_object(Key=key, Body=file,
-                                          ACL='public-read')
-        urls.append("https://s3.eu-central-1.amazonaws.com/{}/{}" \
-                    .format(BUCKET_NAME, key))
+    s3.Bucket(BUCKET_NAME).put_object(Key=key, Body=file,
+                                      ACL='public-read')
+    url = "https://s3.eu-central-1.amazonaws.com/{}/{}".format(BUCKET_NAME,
+                                                                key)
     
-    return urls
+    return url
 
 
 def extract_songs_info(file):
