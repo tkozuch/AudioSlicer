@@ -18,21 +18,4 @@
     </form>
   </div>
 </div>
-
-<script content="text/javascript">
-function list_function(){
-  $.ajax({
-      url:'test/',
-      type: 'GET',
-      success: function(result) {
-        console.log(typeof(result));
-        console.log(result);
-        console.log("nic");
-        console.log(typeof(result.urls));
-        console.log(result.urls);
-      }
-  });
-}
-</script>
-
 {% endblock %}
