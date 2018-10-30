@@ -45,42 +45,21 @@
       });
   },500);
 
-  function getDownloadUrls(paths){
-    var urls = null;
-    $.ajax({
-      async: false,
-      url:'get_download_urls/',
-      type: 'POST',
-      data: {
-          paths: paths,
-          csrfmiddlewaretoken: "{{ my_csrf_token }}",
-      },
-      success: function(result) {
-        urls = result.urls;
-      },
-    });
-    return urls;
-  }
-
   function createHtmlForDownloadLinks(urls, names){
-    var links_list = $("#links-list");
-    var html = "";
+    var links_list = document.getElementById('links-list');
+
     for (i = 0; i < names.length; i++) {
-      url = urls[i];
-      name = names[i];
-      html += "<br><a href=\"" + url + "\" download><span style='font-size:1.2em;'>" + name + "</span></a>";
+        var link = document.createElement("a");
+        var link_text = document.createTextNode(names[i]);
+        var br = document.createElement("br");
+        link.appendChild(link_text);
+        link.href = urls[i];
+        link.style.color = "white";
+        links_list.appendChild(link);
+        links_list.appendChild(br);
     }
-    links_list.html(html);
   }
 
-  function getFilesNames(paths){
-    var names = [];
-    for (i = 0; i < paths.length; i++){
-      path = paths[i];
-      names[i] = path.split('\\').pop().split('/').pop();;
-    }
-    return names;
-  }
 }());
 </script>
 {% endblock %}

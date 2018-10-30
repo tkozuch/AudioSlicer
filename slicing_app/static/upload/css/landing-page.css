@@ -17,6 +17,10 @@ body {
   font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+a {
+    color: #ffffff;
+}
+
 h1,
 h2,
 h3,

@@ -1,1 +1,1 @@
-This folder is for collecting staticfiles while deploying to heroku.
+Folder for collecting staticfiles while deploying to heroku.
