@@ -1,0 +1,9 @@
+rstr
+redis==2.10.6
+django==2.1.2
+django-heroku
+celery==3.1.25
+pydub
+gunicorn
+boto3
+botocore
