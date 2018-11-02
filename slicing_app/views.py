@@ -18,7 +18,7 @@ def upload_file(request):
             my_file = request.FILES['file'].file
             csrf_token = csrf.get_token(request)
             
-            task = slice_audio.delay(my_file, text_info)
+            task = slice_audio.delay(my_file, text_info, upload=True)
             
             context = {'task_id': task.id, 'my_csrf_token': csrf_token }
             
