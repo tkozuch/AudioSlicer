@@ -22,6 +22,8 @@
     <!-- Custom styles for this template -->
     <link href="{% static 'upload/css/landing-page.css' %}" rel="stylesheet">
 
+    <!-- My custom style for overwrite -->
+    <link rel="stylesheet" href="{% static 'upload/my/css/style.css' %}">
   </head>
 
   <body>
@@ -29,15 +31,22 @@
     <!-- Navigation -->
     <nav class="navbar navbar-light bg-light static-top">
       <div class="container">
-        <a class="navbar-brand">Audio Slicer</a>
-        <a class="btn btn-primary" href="">Home</a>
-      </div>
+        <a class="my-navbar-brand navbar-brand"><i class="slicer-logo far fa-file-audio"></i> Audio Slicer</a>
+        <ul class="navigation-links navbar-nav">
+          <li class="my-nav-item nav-item">
+          <a class="my-nav-link nav-link" href="#">Home</a>
+        </li>
+        <li class="my-nav-item nav-item">
+          <a class="my-nav-link nav-link" href="#">Demo</a>
+        </li>
+          </ul>
+        </div>
     </nav>
 
     <!-- Masthead -->
-    <header class="masthead text-white text-center">
+    <header class="masthead text-white text-center" style="background: linear-gradient(#7b7a71, #ecd60d);">
       <div class="overlay"></div>
-              {% block body %}
+        {% block body %}
 
         {% endblock %}
       <div class="container">
