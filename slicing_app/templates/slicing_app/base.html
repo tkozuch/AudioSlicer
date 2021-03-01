@@ -1,6 +1,5 @@
 <html lang="en">
   <head>
-
     {% load static %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,25 +10,22 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    <!-- Bootstrap core CSS -->
     <link href="{% static 'upload/vendor/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
 
-    <!-- Custom fonts for this template -->
     <link href="{% static 'upload/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
     <link href="{% static 'upload/vendor/simple-line-icons/css/simple-line-icons.css' %}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 
-    <!-- Custom styles for this template -->
-    <link href="{% static 'upload/css/landing-page.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'upload/css/landing-page.css' %}">
 
-    <!-- My custom style for overwrite -->
-    <link rel="stylesheet" href="{% static 'upload/my/css/style.css' %}">
+    <!-- My custom styles -->
+    <link rel="stylesheet" href="{% static 'upload/my/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'upload/my/css/upload.css' %}">
+    <link rel="stylesheet" href="{% static 'upload/my/css/slicing.css' %}">
   </head>
-
   <body>
-
     <!-- Navigation -->
-    <nav class="navbar navbar-light bg-light static-top">
+    <nav class="my-navbar navbar navbar-light bg-light static-top">
       <div class="container">
         <a class="my-navbar-brand navbar-brand"><i class="slicer-logo far fa-file-audio"></i> Audio Slicer</a>
         <ul class="navigation-links navbar-nav">
@@ -43,25 +39,19 @@
         </div>
     </nav>
 
-    <!-- Masthead -->
-    <header class="masthead text-white text-center" style="background: linear-gradient(#7b7a71, #ecd60d);">
-      <div class="overlay"></div>
+    <!-- Main section -->
+    <main class="main-section">
+      <div class="main-content-wrapper">
         {% block body %}
-
         {% endblock %}
-      <div class="container">
-
       </div>
-    </header>
+      <div class="my-overlay"></div>
+    </main>
 
     <!-- Footer -->
     <footer class="footer bg-light">
-      <div class="container">
-        <div class="row">
-          <div class=" text-center text-lg-left my-auto">
-            <p class="text-muted small mb-4 mb-lg-0">&copy; Tomasz Kożuch 2018. Zastrzegam sobie prawa do strony.</p>
-          </div>
-        </div>
+      <div class="footer-content">
+        <p class="text-muted">&copy; Tomasz Kożuch. All rights reserved.</p>
       </div>
     </footer>
 
