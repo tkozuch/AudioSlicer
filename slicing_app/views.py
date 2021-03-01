@@ -6,31 +6,35 @@ from django.middleware import csrf
 from django.core.files.storage import FileSystemStorage
 from celery.result import AsyncResult
 
-from .forms import UploadFileForm
+# from .forms import SlicingInfoFormset, SlicingInfoForm
+from .forms import formset as SlicingInfoFormset, FileForm
 from .slicing import slice_audio
 
 
 def upload_file(request):
     if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            text_info = request.POST.get('title')
-            my_file = request.FILES['file'].file
-            csrf_token = csrf.get_token(request)
-            
-            task = slice_audio.delay(my_file, text_info, upload=True)
-            
-            context = {'task_id': task.id, 'my_csrf_token': csrf_token }
-            
-            return render(request, 'slicing_app/slicing.html', context)
-        else:
-            
-            return HttpResponse(json.dumps({'task_id': None}),
-                                content_type='application/json')
+        # form = SlicingInfoForm(request.POST, request.FILES)
+        # if form.is_valid():
+        #     text_info = request.POST.get('title')
+        #     my_file = request.FILES['file'].file
+        #     csrf_token = csrf.get_token(request)
+        #
+        #     task = slice_audio.delay(my_file, text_info, upload=True)
+        #
+        #     context = {'task_id': task.id, 'my_csrf_token': csrf_token }
+        #
+        #     return render(request, 'slicing_app/slicing.html', context)
+        # else:
+        #
+        #     return HttpResponse(json.dumps({'task_id': None}),
+        #                         content_type='application/json')
+        pass
     else:
-        form = UploadFileForm
-        
-    return render(request, 'slicing_app/upload.html', {'form': form})
+        # formset = SlicingInfoFormset()
+        pass
+
+    return render(request, 'slicing_app/upload.html', {'formset': SlicingInfoFormset,
+                                                       'file_form': FileForm()})
 
 
 def get_progress(request):

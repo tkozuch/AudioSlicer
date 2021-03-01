@@ -1,11 +1,29 @@
-from django import forms
+import datetime
 
-class UploadFileForm(forms.Form):
-    sample_text = """1- How To Fly 0:00
-2- Rampampam 0:12
-3- Clouds & Cream 00:22
-4- Australia Street 00:32
-5- These Girls 00:42"""
-    title = forms.CharField(widget=forms.Textarea, label='',
-                            initial=sample_text)
+from django import forms
+from django.forms import BaseFormSet, formset_factory
+
+# Base form name to be rendered in HTML and then which will be used to identify the form data
+# FORM_NAME_BASE = "slicing_form_"
+
+
+class SlicingInfoForm(forms.Form):
+    title = forms.CharField(label='')
+    time = forms.TimeField()
+
+
+class FileForm(forms.Form):
     file = forms.FileField(label='', )
+
+
+SlicingInfoFormset = formset_factory(SlicingInfoForm, extra=3)
+formset = SlicingInfoFormset(
+    initial=[
+        {'title': '1. You love me yeyeye',
+         'time': datetime.time(0, 20, 30)},
+        {'title': '2. Song 2',
+         'time': datetime.time(0, 35, 30)},
+        {'title': '3. Hey you',
+         'time': datetime.time(0, 44, 40)}
+    ]
+)
