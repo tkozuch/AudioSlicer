@@ -29,9 +29,10 @@
         <div class="form-upper-cell">
           <section class="how-to-section">
             <h1>How To?</h1>
+            <h2>Nothing more simple!</h2>
               <ol>
-                <li>Choose file in a suitable format (preferably mp3)</li>
-                <li>In the text area write down how each of resulting audio fragments should be named, and times where they should start. </li>
+                <li>Choose a file in a suitable format (preferably mp3)</li>
+                <li>Fill up the slicing information inputs.</li>
                 <li>And just...</li>
               </ol>
           </section>
@@ -76,8 +77,15 @@
   }
 
   function deleteInputs(deleteButton) {
-    let inputsContainer = deleteButton.parentElement;
-    inputsContainer.parentNode.removeChild(inputsContainer);
+    let audioFragmentsInfo = document.getElementById('audio-fragments-info-container');
+    let inputPairsCount = audioFragmentsInfo.getElementsByTagName("input").length / 2;
+
+    if(inputPairsCount > 2) {
+      let inputsContainer = deleteButton.parentElement;
+      inputsContainer.parentNode.removeChild(inputsContainer);
+    } else {
+      alert("Minimum 2 inputs are necessary");
+    }
   }
 </script>
 {% endblock %}

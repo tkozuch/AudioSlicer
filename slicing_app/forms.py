@@ -1,10 +1,7 @@
 import datetime
 
 from django import forms
-from django.forms import BaseFormSet, formset_factory
-
-# Base form name to be rendered in HTML and then which will be used to identify the form data
-# FORM_NAME_BASE = "slicing_form_"
+from django.forms import formset_factory
 
 
 class SlicingInfoForm(forms.Form):
