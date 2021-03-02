@@ -48,20 +48,27 @@
 <script type="text/javascript">
   $("#add-button").click(function() {
       let audioFragmentsInfo = document.getElementById('audio-fragments-info-container');
-      let inputWrappers = audioFragmentsInfo.getElementsByTagName('div');
-      let lastInputPairWrapper = inputWrappers[inputWrappers.length - 1];
+      let inputWrappers = audioFragmentsInfo.getElementsByClassName('title-time-info');
 
-      let newElement = lastInputPairWrapper.cloneNode(true);
-      let titleInput = newElement.children[0];
-      let timeInput = newElement.children[1];
-      titleInput.setAttribute("value", "");
-      timeInput.setAttribute("value", "");
+      let maxAudioSlicesCount = {{ formset.max_num }};
 
-      incrementNameAndId(titleInput);
-      incrementNameAndId(timeInput);
+      if(inputWrappers.length < maxAudioSlicesCount) {
+        let lastInputPairWrapper = inputWrappers[inputWrappers.length - 1];
 
-      let addButton = document.getElementById('add-button');
-      audioFragmentsInfo.insertBefore(newElement, addButton);
+        let newElement = lastInputPairWrapper.cloneNode(true);
+        let titleInput = newElement.children[0];
+        let timeInput = newElement.children[1];
+        titleInput.setAttribute("value", "");
+        timeInput.setAttribute("value", "");
+
+        incrementNameAndId(titleInput);
+        incrementNameAndId(timeInput);
+
+        let addButton = document.getElementById('add-button');
+        audioFragmentsInfo.insertBefore(newElement, addButton);
+      } else {
+        alert(`Maximum of ${maxAudioSlicesCount} slices are currently possible`);
+      }
     }
   )
 
@@ -80,11 +87,13 @@
     let audioFragmentsInfo = document.getElementById('audio-fragments-info-container');
     let inputPairsCount = audioFragmentsInfo.getElementsByTagName("input").length / 2;
 
-    if(inputPairsCount > 2) {
+    let minAudioSlicesCount = {{ formset.min_num }};
+
+    if(inputPairsCount > minAudioSlicesCount) {
       let inputsContainer = deleteButton.parentElement;
       inputsContainer.parentNode.removeChild(inputsContainer);
     } else {
-      alert("Minimum 2 inputs are necessary");
+      alert(`Minimum of ${minAudioSlicesCount} slices are necessary.`);
     }
   }
 </script>
