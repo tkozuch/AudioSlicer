@@ -29,17 +29,17 @@
                     progress_bar.html('Please wait...');
                 }
                 else if(result.state == 'PROGRESS'){
-                        progress_bar.css({'width': result.details.percent + '%'});
-                        progress_bar.html(result.details.current + '/' + result.details.total);
+                    progress_bar.css({'width': result.details.percent + '%'});
+                    progress_bar.html(result.details.current + '/' + result.details.total);
                 }
                 else {
-                        progress_bar.css({'width': '100%'});
-                        progress_bar.html('Done! Your file has been sliced.');
-                        $("#wait").html("Files ready for download: ");
-                        var urls = result.urls;
-                        var names = result.names;
-                        createHtmlForDownloadLinks(urls, names);
-                        clearInterval(refreshIntervalId);
+                    progress_bar.css({'width': '100%'});
+                    progress_bar.html('Done! Your file has been sliced.');
+                    $("#wait").html("Files ready for download: ");
+                    var urls = result.urls;
+                    var names = result.files_names;
+                    createHtmlForDownloadLinks(urls, names);
+                    clearInterval(refreshIntervalId);
                 }
             },
       });

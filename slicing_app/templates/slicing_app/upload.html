@@ -10,16 +10,17 @@
   <div class="main-bottom-row">
     <form id="generate-user-form" class="my-form" enctype="multipart/form-data" action="" method="post">
       {% csrf_token %}
+      {{ formset.management_form }}
       <div class="form-column">
         <div class="form-upper-cell audio-info-form-container" id="audio-fragments-info-container">
             {% for form in formset %}
               <div class="title-time-info">
                 {{ form.title|addclass:'form-control' }}
                 {{ form.time|addclass:'form-control' }}
-                <button onclick="deleteInputs(this);" class="delete-button btn btn-danger"><i class="fas fa-minus-circle"></i></button>
+                <button type="button" onclick="deleteInputs(this);" class="delete-button btn btn-danger"><i class="fas fa-minus-circle"></i></button>
               </div>
             {% endfor %}
-          <button id="add-button" class="add-button btn btn-secondary">Add <i class="fas fa-plus-circle"></i> </button>
+          <button type="button" id="add-button" class="add-button btn btn-secondary">Add <i class="fas fa-plus-circle"></i> </button>
         </div>
         <div class="form-lower-cell center-input">
           {{ file_form.file }}
@@ -31,7 +32,7 @@
             <h1>How To?</h1>
             <h2>Nothing more simple!</h2>
               <ol>
-                <li>Choose a file in a suitable format (preferably mp3)</li>
+                <li>Choose an audio file for slicing (mp3 format)</li>
                 <li>Fill up the slicing information inputs.</li>
                 <li>And just...</li>
               </ol>

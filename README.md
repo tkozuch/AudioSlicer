@@ -23,7 +23,7 @@ git clone https://github.com/tkozuch/AudioSlicer.git
 ```
 Go to AudioSlicer project folder and open terminal and:
 ```
-celery -A file_upload worker -l info
+celery -A audio_slicer worker -l info
 ```
 
 Open another terminal and:
