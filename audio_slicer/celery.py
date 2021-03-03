@@ -9,7 +9,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'audio_slicer.settings')
 try:
     redis = os.environ['REDIS_URL']
     app = Celery('audio_slicer', broker_pool_limit=1, broker=redis,
-                 result_backend=redis, include=['slicing_app.slice_audio'])
+                 result_backend=redis)
 except KeyError:
     app = Celery('audio_slicer', broker_pool_limit=1)
 

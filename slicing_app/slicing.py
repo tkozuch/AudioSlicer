@@ -13,7 +13,7 @@ TIME_FORMAT = r'\d\d:\d\d:\d\d'
 log = getLogger(__file__)
 
 
-@shared_task(name="slicing_app.slice_audio")
+@shared_task()
 def slice_audio(file, text_input, upload=False):
     """
     Slices audio file according to information given in text input.
