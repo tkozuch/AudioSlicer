@@ -1,14 +1,17 @@
 {% extends 'slicing_app/base.html' %}
 {% block body %}
 {% load static %}
-<div class="progress" style="text-align: center">
-  <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-  <div class="col-xl-9 mx-auto">
-      <h1 id="wait">Wait a moment...</h1>
-      <ul id="links-list" align="center"></ul>
-  </div>
-<br>
+<section class="links-and-progress-info">
+    <div class="progress-bar-wrapper progress" style="text-align: center">
+      <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div class="col-xl-9 mx-auto">
+      <h1 id="wait" class="info-header">Wait a moment...</h1>
+      <ul id="links-list" class="links-list" align="center"></ul>
+    </div>
+    <br>
+</section>
+
 
 <script type="text/javascript">
 (function(){
