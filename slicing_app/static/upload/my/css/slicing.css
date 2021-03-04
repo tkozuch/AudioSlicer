@@ -1,0 +1,21 @@
+.links-and-progress-info {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.progress-bar-wrapper {
+    height: 5vh;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+}
+
+.links-list {
+    font-size: 1.5rem;
+}
+
+.info-header {
+    margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
+}
