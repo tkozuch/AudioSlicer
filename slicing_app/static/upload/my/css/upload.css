@@ -30,20 +30,16 @@
 
 .form-column {
     flex: 1 1 50%;
-    /* background-color: azure; */
-    border: 1px solid green;
     display: flex;
     flex-direction: column;
 }
 
 .form-upper-cell {
-    border: 1px dashed red;
     flex: 1 1 90%;
     padding: 10px;
 }
 
 .form-lower-cell {
-    border: 1px dashed blue;
     flex: 1 1 10%;
 }
 
@@ -53,10 +49,6 @@
 
 .center-input {
     text-align: center;
-}
-
-.form-submit-button {
-
 }
 
 .how-to-section {
