@@ -67,6 +67,10 @@ def get_download_urls(request):
 
 
 def _extract_formset_data(formset_):
+    """
+    Merge the data from multiple inputs into single string (a format which the application
+    previously used.
+    """
     result = ""
 
     for form in formset_.forms:
