@@ -68,7 +68,7 @@ def slice_audio(file, text_input, upload=False):
         audio = AudioSegment.from_mp3(file)
     except Exception as exc:  # TODO: Add custom exception.
         log.exception(f"Problem loading audio: \n{exc}")
-        raise ValueError
+        raise ValueError(exc)
     else:
         log.info("Successfuly loaded audio")
 
