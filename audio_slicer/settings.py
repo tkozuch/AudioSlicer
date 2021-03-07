@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 import django_heroku
 
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1024*1024*10   # 10MB
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -135,7 +137,8 @@ MEDIA_URL = '/media/'
 try: 
 	CELERY_BROKER_URL = os.environ['REDIS_URL']
 except KeyError: 
-	CELERY_BROKER_URL = 'amqp://admin:admin@localhost:5672/admin_host'
+    CELERY_BROKER_URL = 'amqp://admin:admin@localhost:5672/admin_host'
+
 
 try:
 	CELERY_RESULT_BACKEND = os.environ['REDIS_URL']

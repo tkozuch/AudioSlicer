@@ -1,4 +1,5 @@
 import json
+import datetime
 
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -6,31 +7,39 @@ from django.middleware import csrf
 from django.core.files.storage import FileSystemStorage
 from celery.result import AsyncResult
 
-from .forms import UploadFileForm
+from .forms import SlicingInfoFormset, FileForm
 from .slicing import slice_audio
 
 
 def upload_file(request):
     if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            text_info = request.POST.get('title')
-            my_file = request.FILES['file'].file
+        audio_info_formset = SlicingInfoFormset(request.POST)
+        file_form = FileForm(request.POST, request.FILES)
+
+        if audio_info_formset.is_valid() and file_form.is_valid():
+            text_info = _extract_formset_data(audio_info_formset)
+            my_file = file_form.files['file'].file
             csrf_token = csrf.get_token(request)
-            
+
             task = slice_audio.delay(my_file, text_info, upload=True)
-            
-            context = {'task_id': task.id, 'my_csrf_token': csrf_token }
-            
+
+            context = {'task_id': task.id, 'my_csrf_token': csrf_token}
+
             return render(request, 'slicing_app/slicing.html', context)
-        else:
-            
-            return HttpResponse(json.dumps({'task_id': None}),
-                                content_type='application/json')
     else:
-        form = UploadFileForm
-        
-    return render(request, 'slicing_app/upload.html', {'form': form})
+        audio_info_formset = SlicingInfoFormset(
+            initial=[
+                {'title': '1. You love me yeyeye',
+                 'time': datetime.time(0, 00, 00)},
+                {'title': '2. Song 2',
+                 'time': datetime.time(0, 1, 10)},
+                {'title': '3. Hey you',
+                 'time': datetime.time(0, 2, 20)}
+            ]
+        )
+
+    return render(request, 'slicing_app/upload.html', {'formset': audio_info_formset,
+                                                       'file_form': FileForm()})
 
 
 def get_progress(request):
@@ -41,14 +50,33 @@ def get_progress(request):
     }
     if result.state == 'SUCCESS':
         response_data = result.result
-        
+
+    print(f"Got progress on celery task: {response_data}")
+
     return HttpResponse(json.dumps(response_data), content_type='application/json')
 
 
 def get_download_urls(request):
     paths = request.POST.getlist('paths[]')
     fs = FileSystemStorage()
+
     urls = [fs.url(path) for path in paths]
     response_data = {'urls': urls}
-    
+
     return HttpResponse(json.dumps(response_data), content_type='application/json')
+
+
+def _extract_formset_data(formset_):
+    """
+    Merge the data from multiple inputs into single string (a format which the application
+    previously used.
+    """
+    result = ""
+
+    for form in formset_.forms:
+        title = form.cleaned_data.get("title")
+        time = form.cleaned_data.get("time")
+        if title and time:
+            result += f"{title} {time}\n"
+
+    return result

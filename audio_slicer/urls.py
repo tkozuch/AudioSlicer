@@ -6,7 +6,7 @@ from slicing_app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.upload_file),
+    path('', views.upload_file, name='main_view'),
     path('get_progress/', views.get_progress),
     #path('test/', views.test),
 ]

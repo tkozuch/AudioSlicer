@@ -7,7 +7,7 @@ from . import settings
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'audio_slicer.settings')
 
 try:
-    redis =  os.environ['REDIS_URL']
+    redis = os.environ['REDIS_URL']
     app = Celery('audio_slicer', broker_pool_limit=1, broker=redis,
                  result_backend=redis)
 except KeyError:
@@ -16,6 +16,7 @@ except KeyError:
 app.config_from_object('django.conf:settings')
 
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+
 
 @app.task(bind=True)
 def debug_task(self):

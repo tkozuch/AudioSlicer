@@ -1,5 +1,6 @@
 import re
 import os
+from logging import getLogger
 
 from django.template.defaultfilters import slugify
 from celery import current_task, shared_task
@@ -7,8 +8,9 @@ from pydub import AudioSegment
 import boto3
 from botocore.client import Config
 
+TIME_FORMAT = r'\d\d:\d\d:\d\d'
 
-TIME_FORMAT = r'\d+:\d\d'
+log = getLogger(__file__)
 
 
 @shared_task()
@@ -49,6 +51,7 @@ def slice_audio(file, text_input, upload=False):
             aws_secret_access_key=access_secret_key,
             config=Config(signature_version='s3v4')
         )
+        log.info(f"Uploading to S3: {key} | {file}")
         s3.Bucket(bucket_name).put_object(
             Key=key,
             Body=file,
@@ -58,16 +61,19 @@ def slice_audio(file, text_input, upload=False):
             bucket_name,
             key
         )
-    
+
         return url
     
     try:
         audio = AudioSegment.from_mp3(file)
-    except: # TODO: Add custom exception.
-        raise ValueError
-    
+    except Exception as exc:  # TODO: Add custom exception.
+        log.exception(f"Problem loading audio: \n{exc}")
+        raise ValueError(exc)
+    else:
+        log.info("Successfuly loaded audio")
+
     audio_info = extract_songs_info(text_input)
-    
+
     slicing_titles = list(audio_info.keys())
     slicing_times = list(audio_info.values())
     slicing_times.append(audio.duration_seconds)
@@ -114,21 +120,20 @@ def extract_songs_info(text):
     songs_info = {}
     
     for line in text.split('\n'):
-        
-        if line.isspace():
+        if line.isspace() or line == '':
             continue
-            
+
         # Time info indicate songs' starting times.
         # Valid time form is " 'one or more digits':'two digits' "
         # f.e. 03:40, 3:40, 73:40, 125:00.
         match = re.search(TIME_FORMAT, line)
         if not match:
             raise ValueError
-            
+
         time = match.group(0)
-        minute, second = time.split(':')
-        time_in_seconds = int(minute) * 60 + int(second)
-    
+        hours, minute, second = time.split(':')
+        time_in_seconds = 3600 * int(hours) + int(minute) * 60 + int(second)
+
         song = line.replace(time, '').replace('.', '').replace('\n', '')
         songs_info[song] = time_in_seconds
 

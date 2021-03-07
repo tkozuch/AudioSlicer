@@ -1,21 +1,101 @@
 {% extends 'slicing_app/base.html' %}
 {% load static %}
-{% block body %}
-<div class="row">
-  <div class="col-xl-9 mx-auto">
-    <h1 class="mb-5">Paste songs timing info, upload file and slice!</h1>
-  </div>
-  <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-    <form id="generate-user-form" enctype="multipart/form-data" action="" method="post">
-      {% csrf_token %}
+{% load filters %}
 
-      {{ form }}
-      <button type="submit" class="btn btn-block btn-lg btn-primary" style>Slice!</button>
-      <div class="form-row" align="center">
-        <div class="col-6 col-md-2">
+{% block body %}
+<div class="main-content">
+  <div class="main-upper-row">
+    <h1 class="welcome-header">Welcome to this free online tool for slicing audio!</h1>
+  </div>
+  <div class="main-bottom-row">
+    <form id="generate-user-form" class="my-form" enctype="multipart/form-data" action="" method="post">
+      {% csrf_token %}
+      {{ formset.management_form }}
+      <div class="form-column">
+        <div class="form-upper-cell audio-info-form-container" id="audio-fragments-info-container">
+            {% for form in formset %}
+              <div class="title-time-info">
+                {{ form.title|addclass:'form-control' }}
+                {{ form.time|addclass:'form-control' }}
+                <button type="button" onclick="deleteInputs(this);" class="delete-button btn btn-danger"><i class="fas fa-minus-circle"></i></button>
+              </div>
+            {% endfor %}
+          <button type="button" id="add-button" class="add-button btn btn-secondary">Add <i class="fas fa-plus-circle"></i> </button>
+        </div>
+        <div class="form-lower-cell center-input">
+          {{ file_form.file }}
+        </div>
+      </div>
+      <div class="form-column">
+        <div class="form-upper-cell">
+          <section class="how-to-section">
+            <h1>How To?</h1>
+            <h2>Nothing more simple!</h2>
+              <ol>
+                <li>Choose an audio file for slicing (mp3 format)</li>
+                <li>Fill up the slicing information inputs.</li>
+                <li>And just...</li>
+              </ol>
+          </section>
+        </div>
+        <div class="form-lower-cell">
+          <button type="submit" class="form-submit-button btn btn-block btn-lg btn-primary" style>Slice!</button>
         </div>
       </div>
     </form>
   </div>
 </div>
+
+<script type="text/javascript">
+  $("#add-button").click(function() {
+      let audioFragmentsInfo = document.getElementById('audio-fragments-info-container');
+      let inputWrappers = audioFragmentsInfo.getElementsByClassName('title-time-info');
+
+      let maxAudioSlicesCount = {{ formset.max_num }};
+
+      if(inputWrappers.length < maxAudioSlicesCount) {
+        let lastInputPairWrapper = inputWrappers[inputWrappers.length - 1];
+
+        let newElement = lastInputPairWrapper.cloneNode(true);
+        let titleInput = newElement.children[0];
+        let timeInput = newElement.children[1];
+        titleInput.setAttribute("value", "");
+        timeInput.setAttribute("value", "");
+
+        incrementNameAndId(titleInput);
+        incrementNameAndId(timeInput);
+
+        let addButton = document.getElementById('add-button');
+        audioFragmentsInfo.insertBefore(newElement, addButton);
+      } else {
+        alert(`Maximum of ${maxAudioSlicesCount} slices are currently possible`);
+      }
+    }
+  )
+
+  function incrementNameAndId(inputElement) {
+    let name = inputElement.name;
+    let id = inputElement.id;
+
+    let newName = name.replace(/(\d+)/, ($1) => { return parseInt($1) + 1; });
+    let newId = id.replace(/(\d+)/, ($1) => { return parseInt($1) + 1; });
+
+    inputElement.setAttribute('name', newName);
+    inputElement.setAttribute('id', newId);
+  }
+
+  function deleteInputs(deleteButton) {
+    let audioFragmentsInfo = document.getElementById('audio-fragments-info-container');
+    let inputPairsCount = audioFragmentsInfo.getElementsByTagName("input").length / 2;
+
+    let minAudioSlicesCount = {{ formset.min_num }};
+
+    if(inputPairsCount > minAudioSlicesCount) {
+      let inputsContainer = deleteButton.parentElement;
+      inputsContainer.parentNode.removeChild(inputsContainer);
+    } else {
+      alert(`Minimum of ${minAudioSlicesCount} slices are necessary.`);
+    }
+  }
+</script>
 {% endblock %}
