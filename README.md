@@ -23,12 +23,13 @@ During the process a real-time progress bar is displayed and the files are ready
 ## Getting Started
 
 ## Starting with docker
+For the project to fully work you will need to ask developer about `.env` file with environmental variables.
 
 Having Docker installed on your computer, go into project folder and execute:
 <br>`docker-compose build`
 <br>`docker-compose up`
 
-Wait after requirements are downloaded, built and up and running.
+Wait after requirements are downloaded, built and up-and-running.
 
 The application will be available at http://127.0.0.1:8000/
 
