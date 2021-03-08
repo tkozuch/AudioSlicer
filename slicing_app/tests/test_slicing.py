@@ -1,7 +1,6 @@
 import unittest
 
 import rstr
-
 from slicing_app.slicing import extract_songs_info
 
 valid_line = rstr.xeger(r"\w*\d{1,3}:\d\d\w*")
