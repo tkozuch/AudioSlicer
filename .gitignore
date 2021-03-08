@@ -3,3 +3,4 @@ i.idea
 *__pycache__*
 *db.sqlite3
 .env*
+.todo
