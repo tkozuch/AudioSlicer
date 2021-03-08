@@ -16,6 +16,7 @@ invalid_empty_lines = "\n".join([invalid_line, empty_line, invalid_line])
 multiple_empty_lines = "\n".join([empty_line, empty_line, empty_line])
 
 
+# TODO: Adjust, legacy code.
 class TestExtractSongsInfo(unittest.TestCase):
     """
     Tests if there is at least one valid line in text, in which slicing

@@ -6,7 +6,6 @@ from celery import Celery
 
 from . import settings
 
-# set the default Django settings module for the 'celery' program.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "audio_slicer.settings")
 
 try:

@@ -113,11 +113,9 @@ def extract_songs_info(text):
             continue
 
         # Time info indicate songs' starting times.
-        # Valid time form is " 'one or more digits':'two digits' "
-        # f.e. 03:40, 3:40, 73:40, 125:00.
         match = re.search(TIME_FORMAT, line)
         if not match:
-            raise ValueError
+            raise ValueError(f"Line: \t{line} does not match format.")
 
         time = match.group(0)
         hours, minute, second = time.split(":")
