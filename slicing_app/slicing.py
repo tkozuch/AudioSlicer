@@ -26,37 +26,6 @@ def slice_audio(file, text_input, upload=False):
     ):
         raise AttributeError
 
-    def get_song_audio(song_number, audio_segment, songs_times):
-        """
-        Cuts out piece of audio from the audio file.
-        """
-
-        beginning = 1000 * songs_times[song_number]
-        end = 1000 * songs_times[song_number + 1]
-
-        return audio_segment[beginning:end]
-
-    def upload_to_s3(key, file):
-        """
-        Uploads to Amazon S3 service.
-        :return: string
-        """
-
-        access_key_id = os.environ.get("AWS_ACCESS_KEY_ID")
-        access_secret_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
-        bucket_name = os.environ.get("S3_BUCKET")
-        s3 = boto3.resource(
-            "s3",
-            aws_access_key_id=access_key_id,
-            aws_secret_access_key=access_secret_key,
-            config=Config(signature_version="s3v4"),
-        )
-        log.info(f"Uploading to S3: {key} | {file}")
-        s3.Bucket(bucket_name).put_object(Key=key, Body=file, ACL="public-read")
-        url = "https://s3.eu-central-1.amazonaws.com/{}/{}".format(bucket_name, key)
-
-        return url
-
     try:
         audio = AudioSegment.from_mp3(file)
     except Exception as exc:  # TODO: Add custom exception.
@@ -94,6 +63,39 @@ def slice_audio(file, text_input, upload=False):
         return {"urls": urls, "files_names": files_names}
     else:
         return {"files_names": files_names}
+
+
+def get_song_audio(song_number, audio_segment, songs_times):
+    """
+    Cuts out piece of audio from the audio file.
+    """
+
+    beginning = 1000 * songs_times[song_number]
+    end = 1000 * songs_times[song_number + 1]
+
+    return audio_segment[beginning:end]
+
+
+def upload_to_s3(key, file):
+    """
+    Uploads to Amazon S3 service.
+    :return: string
+    """
+
+    access_key_id = os.environ.get("AWS_ACCESS_KEY_ID")
+    access_secret_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
+    bucket_name = os.environ.get("S3_BUCKET")
+    s3 = boto3.resource(
+        "s3",
+        aws_access_key_id=access_key_id,
+        aws_secret_access_key=access_secret_key,
+        config=Config(signature_version="s3v4"),
+    )
+    log.info(f"Uploading to S3: {key} | {file}")
+    s3.Bucket(bucket_name).put_object(Key=key, Body=file, ACL="public-read")
+    url = "https://s3.eu-central-1.amazonaws.com/{}/{}".format(bucket_name, key)
+
+    return url
 
 
 def extract_songs_info(text):

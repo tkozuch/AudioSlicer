@@ -28,6 +28,7 @@ class TestMostCommonUserActions(LiveServerTestCase):
         super().tearDownClass()
 
     def test_page_rendered(self):
+        # Fixme: To be changed to LiveServerTestCase url.
         self.selenium.get("http://127.0.0.1:8000/")
         self.selenium.find_element_by_xpath('//a[contains(text(),"Audio Slicer")]')
         self.selenium.find_element_by_xpath('//button[contains(text(), "Slice")]')
