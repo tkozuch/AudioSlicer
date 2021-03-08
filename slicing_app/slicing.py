@@ -1,12 +1,12 @@
-import re
 import os
+import re
 from logging import getLogger
 
-from django.template.defaultfilters import slugify
-from celery import current_task, shared_task
-from pydub import AudioSegment
 import boto3
 from botocore.client import Config
+from celery import current_task, shared_task
+from django.template.defaultfilters import slugify
+from pydub import AudioSegment
 
 TIME_FORMAT = r'\d\d:\d\d:\d\d'
 

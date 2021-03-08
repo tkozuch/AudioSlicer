@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+
 import django_heroku
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 1024*1024*10   # 10MB

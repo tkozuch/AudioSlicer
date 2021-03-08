@@ -1,13 +1,13 @@
-import json
 import datetime
+import json
 
-from django.http import HttpResponse
-from django.shortcuts import render
-from django.middleware import csrf
-from django.core.files.storage import FileSystemStorage
 from celery.result import AsyncResult
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse
+from django.middleware import csrf
+from django.shortcuts import render
 
-from .forms import SlicingInfoFormset, FileForm
+from .forms import FileForm, SlicingInfoFormset
 from .slicing import slice_audio
 
 
