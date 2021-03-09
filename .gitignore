@@ -4,3 +4,4 @@ i.idea
 *db.sqlite3
 .env*
 .todo
+geckodriver.log

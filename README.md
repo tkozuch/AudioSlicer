@@ -1,6 +1,16 @@
 # AudioSlicer
 
-Audio Slicer is a web application for slicing audio files according to information given in form of text. 
+Audio Slicer is a web application for slicing audio files according to information given in form of text.
+
+## Demo
+
+Demo of application is available on https://audio-slicer.herokuapp.com/ 
+
+(Due to Heroku's 30s max request time policy, the above demo may work only on small files. Was tested there on a test file
+ - AudioSlicer/slicing_app/tests/test_ablum_shorter.mp3.)
+
+## Usage example
+
 A typical usage example includes slicing live concert record or album to individual songs. 
 User gives only two information inputs: text informing about titles and cuts, and a file. 
 
