@@ -94,11 +94,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 MEDIA_URL = "/media/"
 
-CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
-
-CELERY_RESULT_BACKEND = os.environ["CELERY_RESULT_BACKEND"]
-
-CELERY_ACCEPT_CONTENT = ["pickle"]
-CELERY_TASK_SERIALIZER = "pickle"
-CELERY_RESULT_SERIALIZER = "pickle"
 django_heroku.settings(locals())
