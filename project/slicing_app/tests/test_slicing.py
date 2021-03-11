@@ -1,7 +1,7 @@
 import unittest
 
 import rstr
-from slicing_app.slicing import extract_songs_info
+from project.slicing_app import extract_songs_info
 
 valid_line = rstr.xeger(r"\w*\d\d:\d\d:\d\d\w*")
 invalid_line = rstr.xeger(r"\w*")

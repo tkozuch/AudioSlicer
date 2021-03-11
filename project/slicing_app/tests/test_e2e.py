@@ -1,6 +1,6 @@
 import os
 
-from django.contrib.staticfiles.testing import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 
 try:
@@ -15,7 +15,7 @@ except KeyError:
 os.environ["PATH"] += browser_driver
 
 
-class TestMostCommonUserActions(LiveServerTestCase):
+class TestMostCommonUserActions(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
