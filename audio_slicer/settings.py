@@ -8,7 +8,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.environ["SECRET_KEY"]
 
-DEBUG = os.environ["DEBUG"]
+DEBUG = os.environ.get("DEBUG", '').lower() == 'true'
 
 ALLOWED_HOSTS = ["*"]
 
@@ -94,18 +94,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 MEDIA_URL = "/media/"
 
+CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
 
-try:
-    CELERY_BROKER_URL = os.environ["REDIS_URL"]
-except KeyError:
-    CELERY_BROKER_URL = "amqp://admin:admin@localhost:5672/admin_host"
-
-
-try:
-    CELERY_RESULT_BACKEND = os.environ["REDIS_URL"]
-except KeyError:
-    CELERY_RESULT_BACKEND = "amqp://admin:admin@localhost:5672/admin_host"
-
+CELERY_RESULT_BACKEND = os.environ["CELERY_RESULT_BACKEND"]
 
 CELERY_ACCEPT_CONTENT = ["pickle"]
 CELERY_TASK_SERIALIZER = "pickle"
