@@ -3,5 +3,6 @@ i.idea
 *__pycache__*
 *db.sqlite3
 .env*
-.todo
-geckodriver.log
+private/.todo
+private/geckodriver.log
+./private/*
