@@ -4,46 +4,62 @@
 
 {% block body %}
 <div class="main-content">
-  <div class="main-upper-row">
-    <h1 class="welcome-header">Welcome to <strong>Audio Slicer</strong> a <strong>free online tool for slicing mp3 files</strong></h1>
-  </div>
-  <div class="main-bottom-row">
-    <form id="generate-user-form" class="my-form" enctype="multipart/form-data" action="" method="post">
-      {% csrf_token %}
-      {{ formset.management_form }}
-      <div class="form-column">
-        <div class="form-upper-cell audio-info-form-container" id="audio-fragments-info-container">
-            {% for form in formset %}
-              <div class="title-time-info">
-                {{ form.title|addclass:'form-control' }}
-                {{ form.time|addclass:'form-control' }}
-                <button type="button" onclick="deleteInputs(this);" class="delete-button btn btn-danger"><i class="fas fa-minus-circle"></i></button>
-              </div>
-            {% endfor %}
-          <button type="button" id="add-button" class="add-button btn btn-secondary">Add <i class="fas fa-plus-circle"></i> </button>
-        </div>
-        <div class="form-lower-cell center-input">
-          {{ file_form.file }}
-        </div>
-      </div>
-      <div class="form-column">
-        <div class="form-upper-cell">
-          <section class="how-to-section">
-            <h1>How To?</h1>
-            <h2>Nothing more simple!</h2>
-              <ol>
-                <li>Choose an audio file for slicing (mp3 format)</li>
-                <li>Fill up the slicing information inputs.</li>
-                <li>And just...</li>
-              </ol>
-          </section>
-        </div>
-        <div class="form-lower-cell">
-          <button type="submit" class="form-submit-button btn btn-block btn-lg btn-primary" style>Slice!</button>
-        </div>
-      </div>
-    </form>
-  </div>
+    <div class="main-upper-row">
+        <h1 class="welcome-header">Welcome to
+            <strong>Audio Slicer</strong>
+            a
+            <strong>free online tool for slicing mp3 files</strong>
+        </h1>
+    </div>
+    <div class="main-bottom-row">
+        <form id="generate-user-form" class="my-form" enctype="multipart/form-data" action=""
+              method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <div class="form-column">
+                <div class="form-upper-cell audio-info-form-container"
+                     id="audio-fragments-info-container">
+                    {% for form in formset %}
+                    <div class="title-time-info">
+                        {{ form.title|addclass:'form-control' }}
+                        {{ form.time|addclass:'form-control' }}
+                        <button type="button" onclick="deleteInputs(this);"
+                                class="delete-button btn btn-danger">
+                            <i class="fas fa-minus-circle"></i>
+                        </button>
+                    </div>
+                    {% endfor %}
+                    <button type="button" id="add-button" class="add-button btn btn-secondary">
+                        Add
+                        <i class="fas fa-plus-circle"></i>
+                    </button>
+                </div>
+                <div class="form-lower-cell center-input">
+                    {{ file_form.file }}
+                </div>
+            </div>
+
+            <div class="form-column">
+                <div class="form-upper-cell">
+                    <section class="how-to-section">
+                        <h1>How To?</h1>
+                        <h2>Nothing more simple!</h2>
+                        <ol>
+                            <li>Choose an audio file for slicing (mp3 format)</li>
+                            <li>Fill up the slicing information inputs.</li>
+                            <li>And just...</li>
+                        </ol>
+                    </section>
+                </div>
+                <div class="form-lower-cell">
+                    <button type="submit"
+                            class="form-submit-button btn btn-block btn-lg btn-primary" style>
+                        Slice!
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -82,7 +98,6 @@
     if(inputPairsCount > minAudioSlicesCount) {
       let inputsContainer = deleteButton.parentElement;
       inputsContainer.parentNode.removeChild(inputsContainer);
-
       changeInputValue('id_form-TOTAL_FORMS', -1);
       adjustInputAttributesToDjangoFormsetRequirements();
     } else {
@@ -91,7 +106,10 @@
   }
 
   function adjustInputAttributesToDjangoFormsetRequirements() {
-    let inputs = document.getElementById('audio-fragments-info-container').getElementsByTagName("input");
+    /* Django formsets require that the forms rendered have names and ids with numbers going from
+     0.. to N when validating if the formset is valid. */
+    let inputs = document.getElementById(
+                    'audio-fragments-info-container').getElementsByTagName("input");
     for(let i = 0; i < inputs.length; i++) {
       let inputPairNumber = Math.floor(i / 2);
       let input = inputs[i];
@@ -105,9 +123,12 @@
   }
 
   function changeInputValue(inputId, value) {
+      /* Django formsets require proper hidden input values when validating if the formset is
+        valid */
       let input = document.getElementById(inputId);
       let inputValue = parseInt(input.value);
       input.value = inputValue + value;
   }
+
 </script>
 {% endblock %}
