@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name="AudioSlicer",
-    version="1.0",
+    version="1.1.1",
     packages=["slicing_app", "slicing_app.migrations", "audio_slicer"],
     url="",
     license="",
