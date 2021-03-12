@@ -13,7 +13,7 @@ DEBUG = os.environ.get("DEBUG", '').lower() == 'true'
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
-    "slicing_app.apps.UploadConfig",
+    "slicing_app.apps.SlicingAppConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
