@@ -72,28 +72,3 @@ class TestUploadToS3(unittest.TestCase):
             )
 
             resource_create.assert_not_called()
-
-
-# TODO: Adjust, legacy code.
-class TestExtractSongsInfo(unittest.TestCase):
-    """
-    Tests if there is at least one valid line in text, in which slicing
-    time can be detected.
-    """
-
-    def test_invalid_input(self):
-        self.assertRaises(ValueError, extract_songs_info, valid_invalid_empty_lines)
-        self.assertRaises(ValueError, extract_songs_info, multiple_invalid_lines)
-        self.assertRaises(ValueError, extract_songs_info, valid_invalid_lines)
-        self.assertRaises(ValueError, extract_songs_info, multiple_empty_lines)
-        self.assertRaises(ValueError, extract_songs_info, invalid_empty_lines)
-        self.assertRaises(ValueError, extract_songs_info, empty_line)
-        self.assertRaises(ValueError, extract_songs_info, invalid_line)
-        self.assertRaises(AttributeError, extract_songs_info, 123)
-        self.assertRaises(AttributeError, extract_songs_info, True)
-        self.assertRaises(AttributeError, extract_songs_info, [])
-
-    def test_valid_input(self):
-        self.assertIsInstance(extract_songs_info(valid_line), dict)
-        self.assertIsInstance(extract_songs_info(multiple_valid_lines), dict)
-        self.assertIsInstance(extract_songs_info(valid_empty_lines), dict)
