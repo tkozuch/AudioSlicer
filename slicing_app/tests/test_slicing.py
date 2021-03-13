@@ -1,24 +1,10 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-import rstr
 from slicing_app.slicing import (
     extract_songs_info,
     upload_to_s3,
 )
-
-valid_line = rstr.xeger(r"\w*\d\d:\d\d:\d\d\w*")
-invalid_line = rstr.xeger(r"\w*")
-empty_line = " "
-
-multiple_valid_lines = "\n".join([valid_line] * 10)
-valid_invalid_lines = "\n".join([valid_line, valid_line, invalid_line])
-valid_invalid_empty_lines = "\n".join([valid_line, empty_line, invalid_line])
-valid_empty_lines = "\n".join([empty_line, valid_line, empty_line, valid_line])
-multiple_invalid_lines = "\n".join([invalid_line, invalid_line, invalid_line])
-invalid_empty_lines = "\n".join([invalid_line, empty_line, invalid_line])
-multiple_empty_lines = "\n".join([empty_line, empty_line, empty_line])
-
 
 class TestUploadToS3(unittest.TestCase):
     def setUp(self) -> None:
@@ -72,3 +58,5 @@ class TestUploadToS3(unittest.TestCase):
             )
 
             resource_create.assert_not_called()
+
+class TestSliceAudio(unittest.TestCase)
