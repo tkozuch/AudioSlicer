@@ -8,7 +8,7 @@ from django.middleware import csrf
 from django.shortcuts import render
 
 from .forms import FileForm, SlicingInfoFormset
-from .slicing import slice_audio
+from .slicing import slice_audio_task
 
 
 def upload_file(request):
@@ -21,7 +21,7 @@ def upload_file(request):
             my_file = file_form.files["file"].file
             csrf_token = csrf.get_token(request)
 
-            task = slice_audio.delay(my_file, text_info, upload=True)
+            task = slice_audio_task.delay(my_file, text_info, upload=True)
 
             context = {"task_id": task.id, "my_csrf_token": csrf_token}
 

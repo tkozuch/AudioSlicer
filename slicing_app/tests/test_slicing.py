@@ -2,8 +2,9 @@ import unittest
 from unittest.mock import MagicMock, patch
 
 from slicing_app.slicing import (
-    extract_songs_info,
+    slice_audio,
     upload_to_s3,
+    AudioLoadError
 )
 
 class TestUploadToS3(unittest.TestCase):
@@ -59,4 +60,13 @@ class TestUploadToS3(unittest.TestCase):
 
             resource_create.assert_not_called()
 
-class TestSliceAudio(unittest.TestCase)
+
+class TestSliceAudio(unittest.TestCase):
+    def setUp(self) -> None:
+        self.file = MagicMock()
+        self.text_input = MagicMock()
+        self.upload = True
+
+    def test_raises_audio_error_when_problem_with_loading_audio(self):
+        with patch('slicing_app.slicing.AudioSegment.from_mp3', side_effect=Exception):
+            self.assertRaises(AudioLoadError, slice_audio, self.file, self.text_input, self.upload)

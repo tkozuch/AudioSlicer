@@ -13,9 +13,20 @@ log = getLogger(__file__)
 
 
 @shared_task()
-def slice_audio(file: BytesIO, text_input: dict, upload: bool = False):
+def slice_audio_task(file: BytesIO, text_input: dict, upload: bool = False):
     """
-    Slices audio file according to information given in text input.
+    Delegate audio slicing to Celery worker.
+    """
+    # Thanks to this we have the ability to test underlying logic in isolation without calling
+    # for complicated Celery testing logic.
+    return slice_audio(file, text_input, upload)
+
+
+def slice_audio(file: BytesIO, text_input: dict, upload: bool):
+    """
+    Slice audio file according to information given in text input.
+
+    If applicable file will be uploaded to Amazon S3 service for download.
     """
     audio = load_audio(file)
 
@@ -50,7 +61,7 @@ def slice_audio(file: BytesIO, text_input: dict, upload: bool = False):
     )
 
 
-def load_audio(file):
+def load_audio(file: BytesIO):
     try:
         audio = AudioSegment.from_mp3(file)
     except Exception as exc:  # TODO: Add custom exception.
@@ -79,11 +90,11 @@ def upload_to_s3(key, file, access_key_id, access_secret_key, bucket_name):
     return url
 
 
-def update_task_progress(file_part_number, no_output_files):
-    progress_percent = int(file_part_number / no_output_files * 100)
+def update_task_progress(part: int, of_parts: int):
+    progress_percent = int(part / of_parts * 100)
     current_task.update_state(
         state="PROGRESS",
-        meta={"current": file_part_number, "total": no_output_files, "percent": progress_percent},
+        meta={"current": part, "total": of_parts, "percent": progress_percent},
     )
 
 
