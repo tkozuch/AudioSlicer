@@ -24,13 +24,13 @@ def slice_audio(file, text_input, upload=False):
         and isinstance(text_input, str)
         and isinstance(upload, bool)
     ):
-        raise AttributeError
+        raise ValueError
 
     try:
         audio = AudioSegment.from_mp3(file)
     except Exception as exc:  # TODO: Add custom exception.
         log.exception(f"Problem loading audio: \n{exc}")
-        raise ValueError(exc)
+        raise AudioLoadError(exc)
     else:
         log.info("Successfuly loaded audio")
 
@@ -82,9 +82,9 @@ def upload_to_s3(key, file):
     :return: string
     """
 
-    access_key_id = os.environ.get("AWS_ACCESS_KEY_ID")
-    access_secret_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
-    bucket_name = os.environ.get("S3_BUCKET")
+    access_key_id = os.environ["AWS_ACCESS_KEY_ID"]
+    access_secret_key = os.environ["AWS_SECRET_ACCESS_KEY"]
+    bucket_name = os.environ["S3_BUCKET"]
     s3 = boto3.resource(
         "s3",
         aws_access_key_id=access_key_id,
@@ -130,3 +130,7 @@ def extract_songs_info(text):
         return songs_info
     else:
         raise ValueError
+
+
+class AudioLoadError(Exception):
+    pass
