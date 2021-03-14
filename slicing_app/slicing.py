@@ -44,7 +44,7 @@ def slice_audio(file: BytesIO, text_input: dict):
         file_url = upload_to_s3(file_name, file, *_get_s3_credentials())
         download_urls.append(file_url)
 
-        update_task_progress(part=i, of_parts=no_output_files)
+        update_task_progress(part=i + 1, of_parts=no_output_files)
 
     return {"urls": download_urls, "files_names": files_names}
 
