@@ -28,20 +28,19 @@ def slice_audio(file: BytesIO, text_input: dict):
     Slice audio file according to information given in text input and upload it to AWS S3 Server.
     """
     audio = load_audio(file)
-    slicing_titles = list(text_input.keys())
-    audio_fragments = get_audio_fragments(audio, slicing_times=list(text_input.values()))
+
+    slicing_titles = text_input.keys()
+    slicing_times = text_input.values()
+    files_names = [get_file_name(slicing_title) for slicing_title in slicing_titles]
+    audio_fragments = get_audio_fragments(audio, slicing_times=list(slicing_times))
 
     no_output_files = len(text_input)
-    files_names = []
     download_urls = []
 
     for i in range(no_output_files):
-        file_name = slugify(slicing_titles[i]) + ".mp3"
-        files_names.append(file_name)
-
         file = audio_fragments[i].export(format="mp3", bitrate="202")
 
-        file_url = upload_to_s3(file_name, file, *_get_s3_credentials())
+        file_url = upload_to_s3(files_names[i], file, *_get_s3_credentials())
         download_urls.append(file_url)
 
         update_task_progress(part=i + 1, of_parts=no_output_files)
@@ -63,6 +62,10 @@ def get_audio_fragments(
         fragments.append(audio[beginning:end])
 
     return fragments
+
+
+def get_file_name(slicing_title: str):
+    return slugify(slicing_title) + ".mp3"
 
 
 def load_audio(file: BytesIO):
@@ -107,12 +110,22 @@ def _convert_to_miliseconds(time: datetime.time):
 
 
 def _get_s3_credentials():
-    access_key_id = os.environ["AWS_ACCESS_KEY_ID"]
-    access_secret_key = os.environ["AWS_SECRET_ACCESS_KEY"]
-    bucket_name = os.environ["S3_BUCKET"]
+    try:
+        access_key_id = os.environ["AWS_ACCESS_KEY_ID"]
+        access_secret_key = os.environ["AWS_SECRET_ACCESS_KEY"]
+        bucket_name = os.environ["S3_BUCKET"]
+    except KeyError:
+        raise EnvVarsMissingError(
+            "3 of this environmental variables need to be set: "
+            "AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY and S3_BUCKET"
+        ) from KeyError
 
     return access_key_id, access_secret_key, bucket_name
 
 
 class AudioLoadError(Exception):
+    pass
+
+
+class EnvVarsMissingError(KeyError):
     pass
