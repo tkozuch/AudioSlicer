@@ -43,6 +43,21 @@ Past .env file:
 
 When acquired place the file in project folder (`AudioSlicer`)
 
+All required ENV_VARIABLES:
+```
+S3_BUCKET
+SECRET_KEY
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+CELERY_BROKER_URL
+CELERY_RESULT_BACKEND
+PYTHONUNBUFFERED
+DISABLE_COLLECTSTATIC
+C_FORCE_ROOT
+RUNNING_ON_HEROKU
+DEBUG
+```
+
 ## Start with docker:
 
 Having Docker installed on your computer, go into project folder and execute:
