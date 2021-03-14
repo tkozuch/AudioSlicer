@@ -2,6 +2,7 @@ import datetime
 import os
 from io import BytesIO
 from logging import getLogger
+from typing import List
 
 import boto3
 from botocore.client import Config
@@ -13,52 +14,55 @@ log = getLogger(__file__)
 
 
 @shared_task()
-def slice_audio_task(file: BytesIO, text_input: dict, upload: bool = False):
+def slice_audio_task(file: BytesIO, text_input: dict):
     """
     Delegate audio slicing to Celery worker.
     """
-    # Thanks to this we have the ability to test underlying logic in isolation without calling
-    # for complicated Celery testing logic.
-    return slice_audio(file, text_input, upload)
+    # Thanks to this we have the ability to test underlying logic in isolation without
+    # calling for complicated Celery testing logic.
+    return slice_audio(file, text_input)
 
 
-def slice_audio(file: BytesIO, text_input: dict, upload: bool):
+def slice_audio(file: BytesIO, text_input: dict):
     """
-    Slice audio file according to information given in text input.
-
-    If applicable file will be uploaded to Amazon S3 service for download.
+    Slice audio file according to information given in text input and upload it to AWS S3 Server.
     """
     audio = load_audio(file)
-
     slicing_titles = list(text_input.keys())
-    slicing_times = list(map(_convert_to_miliseconds, text_input.values()))
-    slicing_times.append(audio.duration_seconds * 1000)
+    audio_fragments = get_audio_fragments(audio, slicing_times=list(text_input.values()))
 
     no_output_files = len(text_input)
     files_names = []
     download_urls = []
 
-    for file_part_number in range(no_output_files):
-        file_name = slugify(slicing_titles[file_part_number]) + ".mp3"
+    for i in range(no_output_files):
+        file_name = slugify(slicing_titles[i]) + ".mp3"
         files_names.append(file_name)
 
-        beginning = slicing_times[file_part_number]
-        end = slicing_times[file_part_number + 1]
-        audio_fragment = audio[beginning:end]
+        file = audio_fragments[i].export(format="mp3", bitrate="202")
 
-        file = audio_fragment.export(format="mp3", bitrate="202")
+        file_url = upload_to_s3(file_name, file, *_get_s3_credentials())
+        download_urls.append(file_url)
 
-        if upload:
-            file_url = upload_to_s3(file_name, file, *_get_s3_credentials())
-            download_urls.append(file_url)
+        update_task_progress(part=i, of_parts=no_output_files)
 
-        update_task_progress(file_part_number, no_output_files)
+    return {"urls": download_urls, "files_names": files_names}
 
-    return (
-        {"urls": download_urls, "files_names": files_names}
-        if upload
-        else {"files_names": files_names}
-    )
+
+def get_audio_fragments(
+    audio: AudioSegment, slicing_times: List[datetime.time]
+) -> List[AudioSegment]:
+    slicing_times_ms = list(map(_convert_to_miliseconds, slicing_times))
+    slicing_times_ms.append(audio.duration_seconds * 1000)
+
+    fragments = []
+    for fragment_number in range(len(slicing_times)):
+        beginning = slicing_times_ms[fragment_number]
+        end = slicing_times_ms[fragment_number + 1]
+
+        fragments.append(audio[beginning:end])
+
+    return fragments
 
 
 def load_audio(file: BytesIO):
