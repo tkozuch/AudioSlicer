@@ -68,10 +68,6 @@ Wait after requirements are downloaded, built and up-and-running.
 
 The application will be available at http://127.0.0.1:8000/
 
-### To run tests:
-
-`docker-compose exec python manage.py test slicing_app.tests`
-
 
 ## Start by hand
 
