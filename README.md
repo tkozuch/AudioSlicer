@@ -65,8 +65,11 @@ Having Docker installed on your computer, go into project folder and execute:
 <br>`docker-compose up`
 
 Wait after requirements are downloaded, built and up-and-running.
+ 
+(After build, starting of application should take around 1 minute. Usually the process is  finished
+ when the logging to console stops with `[...]celery@xxx ready.` message.)
 
-The application will be available at http://127.0.0.1:8000/
+Visit http://127.0.0.1:8000/ to check the application.
 
 
 ## Start by hand
