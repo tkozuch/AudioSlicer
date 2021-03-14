@@ -98,7 +98,7 @@ pip install -r requirements.txt
 
 #### Set environmental variables:
 
-With bash: `./set_env.sh`<br>
+With bash: `source ./set_env.sh`<br>
 Windows Powershell/command prompt: you're on your own.
 
 #### Run celery worker
