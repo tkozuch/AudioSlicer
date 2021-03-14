@@ -84,18 +84,18 @@ class TestSliceAudio(unittest.TestCase):
     @patch("slicing_app.slicing.load_audio")
     @patch("slicing_app.slicing.update_task_progress")
     @patch("slicing_app.slicing.os.environ", ENV_VARIABLES_MOCK)
-    @patch("slicing_app.slicing.get_audio_fragments")
+    @patch("slicing_app.slicing.divide_audio")
     @patch("slicing_app.slicing.get_file_name")
     def test_upload_to_s3_called_with_appropriate_args(
         self,
         get_file_name,
-        get_audio_fragments,
+        divide_audio,
         update_task_progress,
         load_audio,
         upload_to_s3_mock,
     ):
         get_file_name.side_effect = self.files_names_1
-        get_audio_fragments.return_value = self.audio_fragments_1
+        divide_audio.return_value = self.audio_fragments_1
 
         slice_audio(self.file_mock, self.text_input_1)
 
@@ -129,12 +129,12 @@ class TestSliceAudio(unittest.TestCase):
     @patch("slicing_app.slicing.load_audio")
     @patch("slicing_app.slicing.update_task_progress")
     @patch("slicing_app.slicing.os.environ", ENV_VARIABLES_MOCK)
-    @patch("slicing_app.slicing.get_audio_fragments")
+    @patch("slicing_app.slicing.divide_audio")
     @patch("slicing_app.slicing.get_file_name")
     def test_update_task_progress_called_with_appropriate_args(
         self,
         get_file_name,
-        get_audio_fragments,
+        divide_audio,
         update_task_progress,
         load_audio,
         upload_to_s3_mock,
@@ -155,12 +155,12 @@ class TestSliceAudio(unittest.TestCase):
     @patch("slicing_app.slicing.load_audio")
     @patch("slicing_app.slicing.update_task_progress")
     @patch("slicing_app.slicing.os.environ", ENV_VARIABLES_MOCK)
-    @patch("slicing_app.slicing.get_audio_fragments")
+    @patch("slicing_app.slicing.divide_audio")
     @patch("slicing_app.slicing.get_file_name")
     def test_returns_urls_and_files_names(
         self,
         get_file_name,
-        get_audio_fragments,
+        divide_audio,
         update_task_progress,
         load_audio,
         upload_to_s3_mock,
@@ -182,12 +182,12 @@ class TestSliceAudio(unittest.TestCase):
     @patch("slicing_app.slicing.load_audio")
     @patch("slicing_app.slicing.update_task_progress")
     @patch("slicing_app.slicing.os.environ", ENV_VARIABLES_MOCK)
-    @patch("slicing_app.slicing.get_audio_fragments")
+    @patch("slicing_app.slicing.divide_audio")
     @patch("slicing_app.slicing.get_file_name")
     def test_upload_to_s3_and_update_task_functions_arent_executed_when_empty_text_input(
         self,
         get_file_name,
-        get_audio_fragments,
+        divide_audio,
         update_task_progress,
         load_audio,
         upload_to_s3_mock,
@@ -201,12 +201,12 @@ class TestSliceAudio(unittest.TestCase):
     @patch("slicing_app.slicing.load_audio")
     @patch("slicing_app.slicing.update_task_progress")
     @patch("slicing_app.slicing.os.environ", {})
-    @patch("slicing_app.slicing.get_audio_fragments")
+    @patch("slicing_app.slicing.divide_audio")
     @patch("slicing_app.slicing.get_file_name")
     def test_doesnt_call_upload_when_missing_env_vars(
         self,
         get_file_name,
-        get_audio_fragments,
+        divide_audio,
         update_task_progress,
         load_audio,
         upload_to_s3_mock,
