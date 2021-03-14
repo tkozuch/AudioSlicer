@@ -72,6 +72,7 @@ The application will be available at http://127.0.0.1:8000/
 
 `docker-compose exec python manage.py test slicing_app.tests`
 
+
 ## Start by hand
 
 #### Requirements
@@ -81,11 +82,25 @@ The application will be available at http://127.0.0.1:8000/
 
 #### Installing python requirements
 
+(Optional) Make and activate virtual environment:
+
+`python -m venv ./.venv`
+
+Activate on Windows:
+<br>`.\.venv\Scripts\activate`
+<br>Activate on Linux-Ubuntu:
+<br>`source ./bin/activate`
+
 Open terminal in project folder and run:
 
 ```
 pip install -r requirements.txt
 ```
+
+#### Set environmental variables:
+
+With bash: `./set_env.sh`<br>
+Windows Powershell/command prompt: you're on your own.
 
 #### Run celery worker
 
@@ -97,7 +112,7 @@ celery -A audio_slicer worker -l info
 
 #### Start django app:
 
-Open another terminal and:
+Open another terminal (celery worker needs to be running) and:
 
 ```
 python manage.py runserver
