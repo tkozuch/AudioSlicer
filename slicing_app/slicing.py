@@ -32,7 +32,7 @@ def slice_audio(file: BytesIO, text_input: dict):
     slicing_titles = text_input.keys()
     slicing_times = text_input.values()
     files_names = [get_file_name(slicing_title) for slicing_title in slicing_titles]
-    audio_fragments = get_audio_fragments(audio, slicing_times=list(slicing_times))
+    audio_fragments = divide_audio(audio, slicing_times=list(slicing_times))
 
     no_output_files = len(text_input)
     download_urls = []
@@ -48,9 +48,30 @@ def slice_audio(file: BytesIO, text_input: dict):
     return {"urls": download_urls, "files_names": files_names}
 
 
-def get_audio_fragments(
+def load_audio(file: BytesIO):
+    try:
+        audio = AudioSegment.from_mp3(file)
+    except Exception as exc:  # TODO: Add custom exception.
+        log.exception(f"Problem loading audio: \n{exc}")
+        raise AudioLoadError(exc)
+    else:
+        log.info("Successfully loaded audio")
+    return audio
+
+
+def get_file_name(slicing_title: str):
+    return slugify(slicing_title) + ".mp3"
+
+
+def divide_audio(
     audio: AudioSegment, slicing_times: List[datetime.time]
 ) -> List[AudioSegment]:
+    """
+    Divide audio to fragments
+
+    :param: audio - audio to be divided
+    :param: slicing_times - times indicating where each of the desired fragments start.
+    """
     slicing_times_ms = list(map(_convert_to_miliseconds, slicing_times))
     slicing_times_ms.append(audio.duration_seconds * 1000)
 
@@ -62,21 +83,6 @@ def get_audio_fragments(
         fragments.append(audio[beginning:end])
 
     return fragments
-
-
-def get_file_name(slicing_title: str):
-    return slugify(slicing_title) + ".mp3"
-
-
-def load_audio(file: BytesIO):
-    try:
-        audio = AudioSegment.from_mp3(file)
-    except Exception as exc:  # TODO: Add custom exception.
-        log.exception(f"Problem loading audio: \n{exc}")
-        raise AudioLoadError(exc)
-    else:
-        log.info("Successfully loaded audio")
-    return audio
 
 
 def upload_to_s3(key, file, access_key_id, access_secret_key, bucket_name):

@@ -6,7 +6,7 @@ from slicing_app.slicing import (
     AudioLoadError,
     EnvVarsMissingError,
     slice_audio,
-    upload_to_s3,
+    upload_to_s3
 )
 
 ENV_VARIABLES_MOCK = {

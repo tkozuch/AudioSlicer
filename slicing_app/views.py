@@ -8,7 +8,7 @@ from django.middleware import csrf
 from django.shortcuts import render
 
 from .forms import FileForm, SlicingInfoFormset
-from .slicing import slice_audio_task, slice_audio
+from .slicing import slice_audio_task
 
 
 def upload_file(request):
@@ -17,11 +17,11 @@ def upload_file(request):
         file_form = FileForm(request.POST, request.FILES)
 
         if audio_info_formset.is_valid() and file_form.is_valid():
-            text_info = _extract_formset_data(audio_info_formset)
+            slicing_info = _extract_formset_data(audio_info_formset)
             my_file = file_form.files["file"].file
             csrf_token = csrf.get_token(request)
 
-            task = slice_audio_task.delay(my_file, text_info)
+            task = slice_audio_task.delay(my_file, slicing_info)
 
             context = {"task_id": task.id, "my_csrf_token": csrf_token}
 
@@ -68,8 +68,7 @@ def get_download_urls(request):
 
 def _extract_formset_data(formset_):
     """
-    Merge the data from multiple inputs into single string (a format which the application
-    previously used.
+    Merge the data from multiple inputs into a single object.
     """
     result = {}
 
