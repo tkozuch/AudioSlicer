@@ -1,20 +1,24 @@
 <html lang="en">
-  <head>
+<head>
     {% load static %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Slice albums, concerts and other audio footage to songs!">
+    <meta name="description" content="slice audio footage files">
     <meta name="author" content="Tomasz Kożuch">
 
     <title>Audio Slicer</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    <link href="{% static 'bootstrap-template/vendor/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap-template/vendor/bootstrap/css/bootstrap.css' %}"
+          rel="stylesheet">
 
-    <link href="{% static 'bootstrap-template/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
-    <link href="{% static 'bootstrap-template/vendor/simple-line-icons/css/simple-line-icons.css' %}" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="{% static 'bootstrap-template/vendor/fontawesome-free/css/all.min.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'bootstrap-template/vendor/simple-line-icons/css/simple-line-icons.css' %}"
+          rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic"
+          rel="stylesheet" type="text/css">
 
     <link rel="stylesheet" href="{% static 'bootstrap-template/css/landing-page.css' %}">
 
@@ -22,41 +26,49 @@
     <link rel="stylesheet" href="{% static 'my/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'my/css/upload.css' %}">
     <link rel="stylesheet" href="{% static 'my/css/slicing.css' %}">
-  </head>
-  <body>
-    <!-- Navigation -->
-    <nav class="my-navbar navbar navbar-light bg-light static-top">
-      <div class="container">
-        <a class="my-navbar-brand navbar-brand"><i class="slicer-logo far fa-file-audio"></i> Audio Slicer</a>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="my-navbar navbar navbar-light bg-light static-top">
+    <div class="container">
+        <a class="my-navbar-brand navbar-brand"><i class="slicer-logo far fa-file-audio"></i>
+            Audio Slicer
+        </a>
         <ul class="navigation-links navbar-nav">
-          <li class="my-nav-item nav-item">
-          <a class="my-nav-link nav-link" href="{% url 'main_view' %}">Home</a>
-        </li>
-        <li class="my-nav-item nav-item">
-          <a class="my-nav-link nav-link disabled" href="#">Demo</a>
-        </li>
-          </ul>
-        </div>
-    </nav>
+            <li class="my-nav-item nav-item">
+                <a class="my-nav-link nav-link" href="{% url 'main_view' %}">
+                    Home
+                </a>
+            </li>
+            <li class="my-nav-item nav-item">
+                <a class="my-nav-link nav-link disabled" href="#">
+                    Demo
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
-    <!-- Main section -->
-    <main class="main-section">
-      <div class="main-content-wrapper">
+<!-- Main section -->
+<main class="main-section">
+    <div class="main-content-wrapper">
         {% block body %}
         {% endblock %}
-      </div>
-      <div class="my-overlay"></div>
-    </main>
+    </div>
+    <div class="my-overlay"></div>
+</main>
 
-    <!-- Footer -->
-    <footer class="footer bg-light">
-      <div class="footer-content">
-        <p class="text-muted">&copy; Tomasz Kożuch. All rights reserved.</p>
-      </div>
-    </footer>
+<!-- Footer -->
+<footer class="footer bg-light">
+    <div class="footer-content">
+        <p class="text-muted">
+            &copy; Tomasz Kożuch. All rights reserved.
+        </p>
+    </div>
+</footer>
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="{% static 'bootstrap-template/vendor/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'bootstrap-template/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-  </body>
+<!-- Bootstrap core JavaScript -->
+<script src="{% static 'bootstrap-template/vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'bootstrap-template/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
 </html>

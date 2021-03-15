@@ -8,7 +8,7 @@ from django.middleware import csrf
 from django.shortcuts import render
 
 from .forms import FileForm, SlicingInfoFormset
-from .slicing import slice_audio
+from .slicing import slice_audio_task
 
 
 def upload_file(request):
@@ -17,11 +17,11 @@ def upload_file(request):
         file_form = FileForm(request.POST, request.FILES)
 
         if audio_info_formset.is_valid() and file_form.is_valid():
-            text_info = _extract_formset_data(audio_info_formset)
+            slicing_info = _extract_formset_data(audio_info_formset)
             my_file = file_form.files["file"].file
             csrf_token = csrf.get_token(request)
 
-            task = slice_audio.delay(my_file, text_info, upload=True)
+            task = slice_audio_task.delay(my_file, slicing_info)
 
             context = {"task_id": task.id, "my_csrf_token": csrf_token}
 
@@ -30,8 +30,8 @@ def upload_file(request):
         audio_info_formset = SlicingInfoFormset(
             initial=[
                 {"title": "1. You love me yeyeye", "time": datetime.time(0, 00, 00)},
-                {"title": "2. Song 2", "time": datetime.time(0, 1, 10)},
-                {"title": "3. Hey you", "time": datetime.time(0, 2, 20)},
+                {"title": "2. Song 2", "time": datetime.time(0, 0, 10)},
+                {"title": "3. Hey you", "time": datetime.time(0, 0, 20)},
             ]
         )
 
@@ -68,15 +68,14 @@ def get_download_urls(request):
 
 def _extract_formset_data(formset_):
     """
-    Merge the data from multiple inputs into single string (a format which the application
-    previously used.
+    Merge the data from multiple inputs into a single object.
     """
-    result = ""
+    result = {}
 
     for form in formset_.forms:
         title = form.cleaned_data.get("title")
         time = form.cleaned_data.get("time")
         if title and time:
-            result += f"{title} {time}\n"
+            result[title] = time
 
     return result
