@@ -120,9 +120,29 @@ python manage.py runserver
 Now website is available on local address: http://127.0.0.1:8000/
 
 
-#### To run tests:
+## Running Tests:
 
+Tests in this project include front-end tests which are done with Selenium, to run them you will
+need to specify BROWSER_DRIVER env var, which is the path to your Browser Driver.
+(more information: https://selenium-python.readthedocs.io/installation.html#drivers)
+
+(Apart from this also env vars from previously mentioned .env file should be set.)
+
+### To run backend unittests:
+
+Locally:
+`python manage.py test slicing_app.tests.test_slicing`
+
+With Docker:
+`docker-compose exec web python manage.py test slicing_app.tests.test_slicing`
+
+### To run all tests
+
+(As described Selenium tests need to have BROWSER_DRIVER env var set.)
+
+Locally:
 `python manage.py test slicing_app.tests`
+
 
 ## Built With
 -Django framework

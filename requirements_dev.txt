@@ -6,3 +6,4 @@ pydub
 gunicorn
 boto3
 botocore
+selenium==3.141.0
