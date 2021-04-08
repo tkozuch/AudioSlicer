@@ -3,6 +3,11 @@
 Audio Slicer is a web application for slicing audio files according to information given in 
 form of text.
 
+### Technologies used:
+
+Python, Django, Celery, Java Script, CSS, HTML, Bootstrap, Unittest, Ffmpeg, RabbitMQ, Docker
+, Heroku (for deployment)
+
 ## Demo
 
 Demo of application is available on https://audio-slicer.herokuapp.com/ 
@@ -138,17 +143,11 @@ With Docker:
 
 ### To run all tests
 
-(As described Selenium tests need to have BROWSER_DRIVER env var set.)
+(As described Selenium tests need to have BROWSER_DRIVER env var set. This might now work
+ currently.)
 
 Locally:
 `python manage.py test slicing_app.tests`
-
-
-## Built With
--Django framework
--Bootstrap
--Jquery
--Celery
 
 ## Author
 
