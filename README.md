@@ -5,16 +5,14 @@ form of text.
 
 ### Technologies used:
 
-Python, Django, Celery, Java Script, CSS, HTML, Bootstrap, Unittest, Ffmpeg, RabbitMQ, Docker
-, Heroku (for deployment)
+Python, Django, Celery, Java Script, CSS, HTML, Bootstrap, Unittest, Ffmpeg, RabbitMQ, Docker, Heroku (for deployment)
 
 ## Demo
 
 Demo of application is available on https://audio-slicer.herokuapp.com/ 
 
 (Due to Heroku's 30s max request time policy, the above demo may work only on small files. 
-Was tested there on a test file of size ~500kB: `AudioSlicer/slicing_app/tests/test_ablum_shorter
-.mp3`.)
+Was tested there on a test file of size ~500kB: `AudioSlicer/slicing_app/tests/test_ablum_shorter.mp3`.)
 
 ## Usage example
 
