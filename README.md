@@ -9,14 +9,14 @@ Python, Django, Celery, Java Script, CSS, HTML, Bootstrap, Unittest, Ffmpeg, Rab
 
 ## Demo
 
-Demo of application is available on https://audio-slicer.herokuapp.com/ 
+Demo of application is available on https://audio-slicer.herokuapp.com/ - *legacy repository, might not work currently*
 
 (Due to Heroku's 30s max request time policy, the above demo may work only on small files. 
 Was tested there on a test file of size ~500kB: `AudioSlicer/slicing_app/tests/test_ablum_shorter.mp3`.)
 
 ## Usage example
 
-An example input (inserted in the UI):
+An example input (inserted in the UI, starting times of given fragments):
 ```
 title:                          time:
 1. You Love Me - ye ye ye       0:00
